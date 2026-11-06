@@ -1,0 +1,23 @@
+---
+// Paisaje plano en capas: montañas, sol de alba y bandas de niebla que derivan despacio.
+interface Props { class?: string; sun?: boolean; }
+const { class: cls = '', sun = true } = Astro.props;
+---
+<svg class:list={['ls', cls]} viewBox="0 0 1440 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+  {sun && <circle cx="1090" cy="150" r="82" fill="#FFE2B8" />}
+  <path d="M0 250 L120 190 L230 235 L380 150 L520 230 L640 175 L790 245 L930 160 L1080 235 L1220 180 L1340 225 L1440 190 V420 H0Z" fill="#C9D6E4" />
+  <g class="mist m1"><rect x="-200" y="215" width="1000" height="26" rx="13" fill="#fff" opacity=".55" /><rect x="900" y="190" width="800" height="22" rx="11" fill="#fff" opacity=".6" /></g>
+  <path d="M0 300 L140 240 L260 285 L420 215 L560 290 L700 235 L860 300 L1000 230 L1160 295 L1300 245 L1440 285 V420 H0Z" fill="#9CBFB3" />
+  <g class="mist m2"><rect x="100" y="272" width="900" height="28" rx="14" fill="#fff" opacity=".7" /><rect x="1000" y="255" width="700" height="24" rx="12" fill="#fff" opacity=".55" /></g>
+  <path d="M0 345 L180 290 L330 330 L500 272 L680 335 L840 285 L1020 340 L1200 288 L1440 335 V420 H0Z" fill="#6FA587" />
+  <g class="mist m3"><rect x="-300" y="322" width="1000" height="26" rx="13" fill="#fff" opacity=".75" /><rect x="800" y="338" width="900" height="22" rx="11" fill="#fff" opacity=".6" /></g>
+  <path d="M0 385 L200 345 L420 380 L640 340 L860 382 L1080 346 L1260 378 L1440 352 V420 H0Z" fill="#4F8B6B" />
+</svg>
+
+<style is:global>
+  .ls { display: block; width: 100%; height: auto; }
+  .ls .mist { animation: mist-drift var(--dur-niebla, 18s) ease-in-out infinite alternate; }
+  .ls .m2 { animation-duration: 24s; animation-direction: alternate-reverse; }
+  .ls .m3 { animation-duration: 30s; }
+  @keyframes mist-drift { from { transform: translateX(-70px); } to { transform: translateX(90px); } }
+</style>

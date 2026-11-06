@@ -1,0 +1,35 @@
+---
+import Noi from './Noi.astro';
+---
+<footer class="ft">
+  <div class="wrap ft-in">
+    <div>
+      <p class="ft-brand"><span class="th" lang="th">สนุก</span> Sanuk</p>
+      <p class="ft-tag">Thai, curva a curva.</p>
+      <p class="ft-small">Muy pronto en iOS y Android.</p>
+    </div>
+    <ul>
+      <li><a href="/#historia">El viaje</a></li>
+      <li><a href="/#como-funciona">Cómo funciona</a></li>
+      <li><a href="/juegos">Los 20 juegos</a></li>
+      <li><a href="/design-system">Sistema de diseño</a></li>
+    </ul>
+    <div class="ft-noi" aria-hidden="true"><Noi pose="duerme" size={96} still /></div>
+  </div>
+  <p class="wrap ft-end"><span class="th" lang="th">ไม่เป็นไร</span> · Hecho con cariño para quien sueña con Mae Hong Son.</p>
+</footer>
+
+<style>
+  .ft { background: var(--noche); color: #e6ebf5; padding: 48px 0 28px; }
+  .ft-in { display: grid; gap: 28px; align-items: center; }
+  @media (min-width: 720px) { .ft-in { grid-template-columns: 1.4fr 1fr auto; } }
+  .ft-brand { font-family: var(--f-display); font-weight: 700; font-size: 1.8rem; margin: 0; color: #fff; }
+  .ft-brand .th { color: var(--buatong); }
+  .ft-tag { font-family: var(--f-display); font-size: 1.2rem; margin: 0; color: var(--alba); }
+  .ft-small { margin: .4em 0 0; color: #c3cde0; }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  a { color: #fff; font-weight: 800; display: inline-block; padding: 4px 0; }
+  a:hover { color: var(--alba); }
+  .ft-end { margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--noche-2); font-size: .9rem; color: #c3cde0; }
+  .ft-end .th { color: var(--buatong); }
+</style>

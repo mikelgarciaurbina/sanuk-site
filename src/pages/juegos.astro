@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Noi from '../components/Noi.astro';
+import Landscape from '../components/Landscape.astro';
+import { gameGroups } from '../data/content';
+---
+<Layout title="Los 20 juegos · Sanuk" description="Veinte juegos para practicar thai: palabras, oído y tonos, frases, vida real y letras. Práctica libre en la feria de Sanuk.">
+  <section class="top">
+    <div class="wrap top-in">
+      <div>
+        <p class="eyebrow">La feria</p>
+        <h1>Los 20 juegos</h1>
+        <p class="lead">Práctica libre, sin ruta ni vidas que perder. Cinco grupos, cada uno entrena algo distinto. Elige el que te apetezca.</p>
+        <nav class="jump" aria-label="Grupos de juegos">
+          {gameGroups.map((g) => <a class="btn btn-ghost btn-sm" href={`#${g.id}`}>{g.name}</a>)}
+        </nav>
+      </div>
+      <Noi pose="feliz" size={220} />
+    </div>
+    <Landscape class="ls-top" sun={false} />
+  </section>
+
+  {gameGroups.map((g) => (
+    <section class="section grp" id={g.id}>
+      <div class="wrap">
+        <h2>{g.name}</h2>
+        <p class="lead">{g.blurb} <span class="tr">Entrena: {g.trains}.</span></p>
+        <div class="grid g3">
+          {g.games.map((x) => (
+            <article class="card lift" id={`juego-${x.n}`}>
+              <div class="head">
+                <span class="n">{x.n}</span>
+                {x.thai && <span class="th gl" lang="th" aria-hidden="true">{x.thai}</span>}
+              </div>
+              <h3>{x.name}</h3>
+              <p>{x.line}</p>
+              <p class="trains">Entrena: {x.trains.toLowerCase()}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+  <section class="end"><div class="wrap"><a class="btn" href="/#historia">Volver al viaje</a></div></section>
+</Layout>
+
+<style>
+  .top { position: relative; overflow: hidden; padding-top: 40px; }
+  .top-in { position: relative; z-index: 2; display: grid; gap: 12px; align-items: center; padding-bottom: clamp(60px, 12vw, 140px); }
+  @media (min-width: 760px) { .top-in { grid-template-columns: 1.4fr 1fr; } .top-in :global(.noi) { justify-self: center; } }
+  .top :global(.ls) { position: absolute; bottom: 0; left: 0; z-index: 1; height: clamp(120px, 20vw, 260px); }
+  .jump { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .grp:nth-of-type(even) { background: var(--blanco); }
+  .grp:nth-of-type(even) .card { background: var(--niebla); box-shadow: 0 4px 0 var(--niebla-3); }
+  .tr { color: var(--arrozal-hondo); font-weight: 900; }
+  .grp .grid { margin-top: 28px; }
+  .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .n { width: 44px; height: 44px; border-radius: 50%; background: var(--azafran); box-shadow: 0 3px 0 var(--azafran-hondo); display: grid; place-items: center; font-family: var(--f-display); font-weight: 700; font-size: 1.15rem; }
+  .gl { font-size: 2.4rem; color: var(--mohom); line-height: 1; }
+  .card p { color: var(--tinta-2); margin-bottom: .6em; }
+  .trains { font-size: .85rem; font-weight: 800; color: var(--arrozal-hondo) !important; margin: 0 !important; }
+  .end { padding: 0 0 72px; background: var(--blanco); }
+  .end .wrap { padding-top: 16px; }
+</style>

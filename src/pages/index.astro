@@ -1,0 +1,261 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Noi from '../components/Noi.astro';
+import Landscape from '../components/Landscape.astro';
+import RoadMap from '../components/RoadMap.astro';
+import LetterDemo from '../components/LetterDemo.astro';
+import { stops, moons, allGames, featuredGames, principles } from '../data/content';
+import { NOI_POSES } from '../brand/noi-art';
+
+const featured = featuredGames.map((n) => allGames.find((g) => g.n === n)!);
+const art: Record<number, string> = { 16: 'ico-curva', 8: 'w-tigre', 3: 'w-arroz', 10: 'w-mango', 14: 'ico-platano', 15: 'w-cafe' };
+const how = [
+  ['Curva a curva', 'Lecciones de 3 a 5 minutos. Una curva, una idea, y listo: cabe en cualquier trayecto.', 'ico-curva'],
+  ['La carta', 'El progreso se ve: cada palabra que aprendes despeja la niebla de la carta de Yai.', 'ico-sello'],
+  ['La feria', 'Veinte juegos de práctica libre para cuando te apetezca jugar sin ruta ni prisa.', 'w-mango'],
+];
+const gear = [
+  ['Farolillo', 'Tu racha diaria. Cada día que practicas, el farolillo sigue en el aire.', 'ico-farol', 'lantern'],
+  ['Plátanos', 'Los puntos que ganas al acertar. Noi se los come con mucho gusto.', 'ico-platano', ''],
+  ['Sellos', 'Logros de pasaporte: uno por cada parada y cada hazaña del camino.', 'ico-sello', ''],
+  ['Paraguas de Bo Sang', 'Protege tu racha un día de lluvia. Papel pintado a mano, como los de Bo Sang.', 'ico-paraguas', ''],
+];
+const poseTxt: Record<string, string> = { feliz: 'Feliz', hola: 'Saluda', celebra: 'Celebra', piensa: 'Piensa', ups: 'Ups', duerme: 'Duerme', escucha: 'Escucha' };
+---
+<Layout
+  title="Sanuk · Thai, curva a curva"
+  description="Aprende thai jugando, para hispanohablantes. 1.864 curvas de Chiang Mai a Mae Hong Son, una carta de Yai por entender y Noi, la elefanta, de guía."
+>
+  <section class="hero">
+    <div class="wrap hero-in">
+      <div class="hero-txt">
+        <p class="eyebrow">Aprende thai jugando</p>
+        <h1><span class="th hero-th" lang="th">สนุก</span><span class="hero-wm">Sanuk</span></h1>
+        <p class="tag">Thai, curva a curva.</p>
+        <p class="lead">Una app para aprender thai si hablas español. Lecciones de 3 a 5 minutos, veinte juegos y una carta que, palabra a palabra, vas a poder leer.</p>
+        <div class="cta">
+          <a class="btn" href="#historia">Conoce el viaje</a>
+          <a class="btn btn-ghost" href="#juegos">Ver los 20 juegos</a>
+        </div>
+        <p class="soon">Muy pronto en iOS y Android.</p>
+      </div>
+      <div class="hero-noi">
+        <div class="bubble"><span class="th" lang="th">สวัสดี!</span> <span class="rom">sà-wàt-dii</span> · ¡hola!</div>
+        <Noi pose="hola" size={300} title="Noi, la elefanta, te saluda" />
+      </div>
+    </div>
+    <Landscape />
+  </section>
+
+  <section class="section" id="historia">
+    <div class="wrap story">
+      <div class="story-txt">
+        <p class="eyebrow">El viaje</p>
+        <h2>Una carta, una carretera y mucha niebla</h2>
+        <p class="lead">En lo alto de Mae Hong Son, donde la niebla se queda a dormir, una familia espera conocerte.</p>
+        <p>Desde Chiang Mai son cinco horas de carretera: <strong>1.864 curvas</strong> entre arrozales, bambú y nubes. Yai, la abuela, te ha escrito una carta en thai. Todavía no entiendes nada.</p>
+        <p>Noi, una elefanta exploradora con sombrero de safari, conoce el camino. Cada palabra que aprendes despeja un poco la niebla. Cuando llegues arriba, entenderás la carta entera… y sabrás qué contestar.</p>
+        <p class="end">Al final del camino, Yai te ata el hilo blanco de la bendición en la muñeca (<span class="th" lang="th">ผูกข้อมือ</span>, <span class="rom">phùuk-khɔ̂ɔ-mʉʉ</span>).</p>
+        <p><a href="#paradas">Mira las 14 paradas</a></p>
+      </div>
+      <RoadMap />
+    </div>
+  </section>
+
+  <section class="section letter" id="carta">
+    <div class="wrap">
+      <p class="eyebrow">La carta de Yai</p>
+      <h2>Ahora mismo no entiendes nada. Pruébalo.</h2>
+      <p class="lead">Esta es la carta tal como llega: todo en niebla. Aprende una palabra y mira cómo se despeja.</p>
+      <LetterDemo />
+    </div>
+  </section>
+
+  <section class="section" id="como-funciona">
+    <div class="wrap">
+      <p class="eyebrow">Cómo funciona</p>
+      <h2>Se aprende curva a curva</h2>
+      <div class="grid g3 how">
+        {how.map(([t, p, i]) => (
+          <article class="card lift">
+            <img src={`/img/${i}.svg`} alt="" width="64" height="64" loading="lazy" />
+            <h3>{t}</h3>
+            <p>{p}</p>
+          </article>
+        ))}
+      </div>
+      <h3 class="sub">Tu equipaje para el camino</h3>
+      <div class="grid g4 gear">
+        {gear.map(([t, p, i, c]) => (
+          <article class="card lift">
+            <img class={c} src={`/img/${i}.svg`} alt="" width="56" height="56" loading="lazy" />
+            <h4>{t}</h4>
+            <p>{p}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section games" id="juegos">
+    <div class="wrap">
+      <p class="eyebrow">La feria</p>
+      <h2>Veinte juegos para practicar sin ruta</h2>
+      <p class="lead">Seis para abrir boca. Hay palabras, oído, frases, vida real y letras.</p>
+      <div class="grid g3">
+        {featured.map((g) => (
+          <a class="card" href={`/juegos#juego-${g.n}`}>
+            <img src={`/img/${art[g.n]}.svg`} alt="" width="56" height="56" loading="lazy" />
+            <h3>{g.name}</h3>
+            <p>{g.line}</p>
+            <p class="trains">Entrena: {g.trains.toLowerCase()}</p>
+          </a>
+        ))}
+      </div>
+      <p class="more"><a class="btn" href="/juegos">Ver los 20 juegos</a></p>
+    </div>
+  </section>
+
+  <section class="section" id="paradas">
+    <div class="wrap">
+      <p class="eyebrow">La carretera</p>
+      <h2>Catorce paradas hasta el hilo blanco</h2>
+      <ol class="stops">
+        {stops.map(([name, topic], i) => (
+          <li class="card lift">
+            <span class="num">{i + 1}</span>
+            <div><h3>{name}</h3><p>{topic[0]!.toUpperCase() + topic.slice(1)}.</p></div>
+          </li>
+        ))}
+      </ol>
+      <p class="epi"><strong>Epílogo.</strong> <span class="th" lang="th">คำเมือง</span> <span class="rom">kham mueang</span>: las palabras del norte.</p>
+    </div>
+  </section>
+
+  <section class="section season2" id="temporada-2">
+    <div class="wrap">
+      <p class="eyebrow">Temporada 2 · hacia el B1</p>
+      <h2>Un año en el pueblo</h2>
+      <p class="lead">Después del hilo blanco, la familia te invita a quedarte. Doce lunas de vida en Mae Hong Son: cada mes, siete lecciones con las palabras que más usan los tailandeses y una misión para practicar de verdad con tu pareja o con la familia.</p>
+      <ol class="moons">
+        {moons.map(([month, th, title, topic], i) => (
+          <li class="card lift">
+            <span class="moon" aria-hidden="true">{i + 1}</span>
+            <div>
+              <p class="mes">{month} · <span class="th" lang="th">{th}</span></p>
+              <h3>{title}</h3>
+              <p>{topic[0]!.toUpperCase() + topic.slice(1)}.</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section noi-sec" id="noi">
+    <div class="wrap noi-in">
+      <div>
+        <p class="eyebrow">Tu guía</p>
+        <h2>Conoce a Noi</h2>
+        <p class="lead"><span class="th" lang="th">น้อย</span> <span class="rom">nɔ́ɔi</span>. Significa «pequeña». Pesa 1.200 kilos y no lo sabe.</p>
+        <p>Es una elefanta exploradora curiosa y alegre: ojos enormes, orejas grandes con pecas rosas y sin colmillos. Lleva sombrero de safari con un frangipani, el pañuelo de cuadros pha khao ma y una mochila índigo llena de plátanos. Nunca regaña: cuando fallas, se ríe contigo.</p>
+        <ul class="says">
+          <li class="bubble"><span class="th" lang="th">เก่งมาก!</span> <span class="rom">kèng mâak</span> · ¡qué crack!</li>
+          <li class="bubble"><span class="th" lang="th">สู้ๆ</span> <span class="rom">sûu sûu</span> · ¡ánimo!</li>
+          <li class="bubble"><span class="th" lang="th">ไม่เป็นไร</span> <span class="rom">mâi pen rai</span> · no pasa nada</li>
+        </ul>
+      </div>
+      <ul class="poses">
+        {NOI_POSES.map((p) => (
+          <li><Noi pose={p} size={120} still /><span>{poseTxt[p]}</span></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="principios">
+    <div class="wrap">
+      <p class="eyebrow">Principios</p>
+      <h2>Cómo pensamos Sanuk</h2>
+      <div class="grid g3 pr">
+        {principles.map(([t, p]) => (
+          <article class="card lift"><h3>{t}</h3><p>{p}</p></article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="close">
+    <div class="wrap close-in">
+      <Noi pose="celebra" size={180} />
+      <div>
+        <h2>La niebla se despeja curva a curva</h2>
+        <p class="lead">Muy pronto en iOS y Android.</p>
+        <a class="btn" href="#carta">Prueba la carta de Yai</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero { position: relative; overflow: hidden; padding-top: clamp(28px, 6vw, 72px); background: var(--niebla); }
+  .hero-in { position: relative; z-index: 2; display: grid; gap: 8px; align-items: end; padding-bottom: clamp(70px, 14vw, 190px); }
+  @media (min-width: 880px) { .hero-in { grid-template-columns: 1.15fr 1fr; align-items: center; } }
+  h1 { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 20px; margin-bottom: .2em; }
+  .hero-th { font-size: 1.1em; font-weight: 700; color: #a85d00; }
+  .hero-wm { font-family: var(--f-display); }
+  .tag { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.5rem, 4.4vw, 2.1rem); margin: 0 0 .6em; }
+  .cta { display: flex; flex-wrap: wrap; gap: 14px; margin: 24px 0 18px; }
+  .soon { display: inline-block; background: var(--azafran-suave); border-radius: var(--r-pill); padding: 6px 16px; font-weight: 900; font-size: .9rem; margin: 0; }
+  .hero-noi { display: grid; justify-items: center; gap: 4px; position: relative; }
+  .hero-noi .bubble { justify-self: start; margin-left: 12%; }
+  .hero :global(.ls) { position: absolute; bottom: 0; left: 0; z-index: 1; height: clamp(150px, 26vw, 380px); }
+  .hero-noi :global(.noi) { position: relative; z-index: 3; margin-bottom: -4px; }
+
+  .story { display: grid; gap: 40px; align-items: center; }
+  @media (min-width: 880px) { .story { grid-template-columns: 1.1fr 1fr; gap: 64px; } }
+  .story .end { background: var(--blanco); border-radius: var(--r-l); padding: 14px 18px; box-shadow: 0 3px 0 var(--niebla-3); }
+  .letter { background: var(--niebla-2); }
+  .how img, .gear img, .games img { margin-bottom: 8px; }
+  .sub { margin-top: 56px; }
+  .gear h4 { font-size: 1.15rem; margin-bottom: .3em; }
+  .gear p { margin: 0; color: var(--tinta-2); }
+  .lantern { animation: float 3.6s ease-in-out infinite; }
+  @keyframes float { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-8px) rotate(2deg); } }
+  .games { background: var(--blanco); }
+  .games .card { background: var(--niebla); box-shadow: 0 4px 0 var(--niebla-3); }
+  .games .card p { color: var(--tinta-2); margin-bottom: .6em; }
+  .trains { font-size: .85rem; font-weight: 800; color: var(--arrozal-hondo) !important; margin: 0 !important; }
+  .more { margin-top: 32px; }
+  .stops { list-style: none; margin: 32px 0 0; padding: 0; display: grid; gap: 14px; }
+  @media (min-width: 720px) { .stops { grid-template-columns: repeat(2, 1fr); } }
+  .stops li { display: flex; gap: 16px; align-items: center; padding: 16px 20px; }
+  .stops h3 { font-size: 1.1rem; margin: 0 0 .1em; }
+  .stops p { margin: 0; color: var(--tinta-2); }
+  .num { flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--azafran); display: grid; place-items: center; font-family: var(--f-display); font-weight: 700; font-size: 1.1rem; box-shadow: 0 3px 0 var(--azafran-hondo); }
+  .stops li:first-child .num { background: var(--arrozal); color: #fff; box-shadow: 0 3px 0 var(--arrozal-hondo); }
+  .stops li:last-child .num { background: var(--farol); box-shadow: 0 3px 0 #c24a22; }
+  .epi { margin-top: 28px; }
+  .season2 { background: #fbf6e2; }
+  .moons { list-style: none; margin: 32px 0 0; padding: 0; display: grid; gap: 14px; }
+  @media (min-width: 720px) { .moons { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1040px) { .moons { grid-template-columns: repeat(3, 1fr); } }
+  .moons li { display: flex; gap: 16px; align-items: center; padding: 16px 20px; background: var(--blanco); }
+  .moons h3 { font-size: 1.1rem; margin: 0 0 .1em; }
+  .moons p { margin: 0; color: var(--tinta-2); }
+  .moons .mes { font-size: .8rem; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; color: #8a5a00; }
+  .moon { position: relative; flex: none; width: 44px; height: 44px; border-radius: 50%; background: #ffc83d; display: grid; place-items: center; font-family: var(--f-display); font-weight: 700; font-size: 1rem; color: #5a3a00; box-shadow: 0 3px 0 #e8a600; }
+  .moon::after { content: ''; position: absolute; top: -3px; right: -3px; width: 16px; height: 16px; border-radius: 50%; background: var(--blanco); }
+  .noi-sec { background: var(--azafran-suave); }
+  .noi-in { display: grid; gap: 40px; align-items: center; }
+  @media (min-width: 880px) { .noi-in { grid-template-columns: 1fr 1fr; } }
+  .says { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 16px; justify-items: start; }
+  .says .bubble { margin-left: 12px; }
+  .poses { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; }
+  .poses li { background: var(--blanco); border-radius: var(--r-xl); padding: 12px 8px; display: grid; justify-items: center; gap: 4px; font-weight: 900; box-shadow: 0 4px 0 var(--niebla-3); }
+  .poses li :global(.noi) { width: 100%; max-width: 110px; }
+  .close { background: var(--noche); color: #fff; padding: clamp(48px, 8vw, 88px) 0; }
+  .close-in { display: grid; gap: 24px; justify-items: center; text-align: center; }
+  @media (min-width: 720px) { .close-in { grid-template-columns: auto 1fr; text-align: left; justify-items: start; } }
+  .close .lead { color: var(--alba); }
+</style>

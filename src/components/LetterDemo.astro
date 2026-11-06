@@ -1,0 +1,127 @@
+---
+import { letter } from '../data/content';
+const total = letter.reduce((a, l) => a + l.toks.length, 0);
+let k = 0;
+const lines = letter.map((l) => ({ es: l.es, toks: l.toks.map((t) => ({ ...t, i: k++ })) }));
+---
+<div class="ld" id="carta-demo" data-total={total}>
+  <script is:inline>document.currentScript.parentElement.setAttribute('data-js', '');</script>
+  <div class="ld-ctrl">
+    <button type="button" class="btn" data-learn>Aprender una palabra</button>
+    <button type="button" class="btn btn-ghost btn-sm" data-reset>Empezar de nuevo</button>
+    <label class="ld-range">
+      <span>Palabras aprendidas: <b data-n>0</b> de {total}</span>
+      <input type="range" min="0" max={total} value="0" step="1" data-range aria-label="Palabras aprendidas" />
+    </label>
+    <p class="ld-pct" role="status" aria-live="polite">Entiendes el <b data-pct>0</b> %</p>
+  </div>
+
+  <article class="paper" lang="th" aria-label="La carta de Yai, en thai">
+    <p class="paper-head">จดหมายจากยาย</p>
+    {lines.map((l) => (
+      <p class="line" data-es={l.es}>
+        <span class="toks">
+          {l.toks.map((t) => (
+            <span class="w" data-i={t.i}>
+              <span class="w-th th">{t.t}</span>
+              <span class="w-gl"><span class="w-rom">{t.r}</span><span class="w-es" lang="es">{t.g}</span></span>
+            </span>
+          ))}
+        </span>
+        <span class="es" lang="es">«{l.es}»</span>
+      </p>
+    ))}
+  </article>
+  <p class="ld-end" data-end lang="es">Has llegado. Yai te ata el hilo blanco en la muñeca (<span class="th" lang="th">ผูกข้อมือ</span>) y ya sabes qué contestar.</p>
+</div>
+
+<style>
+  .ld-ctrl { display: flex; flex-wrap: wrap; gap: 14px 16px; align-items: center; margin-bottom: 28px; }
+  .ld-range { display: grid; gap: 4px; flex: 1 1 260px; font-weight: 800; }
+  .ld-range input { width: 100%; accent-color: var(--azafran-hondo); height: 28px; }
+  .ld-pct { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 1.5rem; flex-basis: 100%; }
+  .ld-pct b { color: var(--arrozal-hondo); font-variant-numeric: tabular-nums; }
+  [data-js]:not([data-js-ready]) .ld-ctrl { visibility: visible; }
+  .ld:not([data-js]) .ld-ctrl { display: none; }
+
+  .paper { background: #fffdf7; border-radius: 10px; padding: clamp(20px, 4vw, 40px); max-width: 760px; margin-inline: auto; transform: rotate(-1.2deg); box-shadow: 0 4px 0 var(--niebla-3), 0 18px 36px rgb(29 35 71 / .16); position: relative; }
+  .paper::before { content: ''; position: absolute; top: -12px; left: 50%; width: 90px; height: 26px; margin-left: -45px; background: rgb(255 200 61 / .75); transform: rotate(2deg); border-radius: 4px; }
+  .paper-head { font-weight: 700; font-size: 1.1rem; color: var(--tinta-2); margin-bottom: 1.4em; }
+  .line { margin: 0 0 1.5em; }
+  .toks { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+  .w { position: relative; display: inline-flex; flex-direction: column; align-items: center; padding: 0 2px; border-radius: 8px; }
+  .w-th { font-size: clamp(1.35rem, 4.4vw, 1.8rem); line-height: 1.5; font-weight: 500; transition: filter var(--dur-lento) ease-out; }
+  .w-gl { display: flex; flex-direction: column; align-items: center; line-height: 1.2; font-size: .78rem; margin-top: 2px; transition: opacity var(--dur-lento) ease-out; }
+  .w-rom { font-style: italic; color: var(--tinta-2); }
+  .w-es { font-weight: 900; color: var(--arrozal-hondo); }
+  .es { display: block; margin-top: .6em; font-weight: 700; color: var(--tinta-2); }
+
+  /* niebla: solo con JS activo; sin JS todo se lee */
+  .ld[data-js] .w::after { content: ''; position: absolute; inset: -2px; border-radius: 8px; background: rgb(255 255 255 / .78); transform-origin: left center; transform: scaleX(1); transition: transform var(--dur-lento) ease-out; pointer-events: none; }
+  .ld[data-js] .w:not(.on) .w-th { filter: blur(6px); }
+  .ld[data-js] .w:not(.on) .w-gl { opacity: 0; }
+  .ld[data-js] .w.on::after { transform: scaleX(0); transform-origin: right center; }
+  .ld[data-js] .line:not(.done) .es { opacity: 0; transition: opacity var(--dur-lento); }
+  .ld[data-js] .line.done .es { opacity: 1; }
+  .w.pop .w-th { animation: wpop var(--dur-lento) var(--ease-pop); }
+  @keyframes wpop { 40% { transform: translateY(-4px) scale(1.08); } }
+  .ld-end { max-width: 760px; margin: 28px auto 0; font-family: var(--f-display); font-size: 1.2rem; font-weight: 600; display: none; background: var(--arrozal-suave); padding: 14px 20px; border-radius: var(--r-l); }
+  .ld.complete .ld-end { display: block; }
+  .ld .paper { transition: transform var(--dur-base); }
+  @media (prefers-reduced-motion: reduce) { .paper { transform: none; } }
+</style>
+
+<script>
+  const root = document.getElementById('carta-demo');
+  if (root) {
+    const words = Array.from(root.querySelectorAll<HTMLElement>('.w'));
+    const lines = Array.from(root.querySelectorAll<HTMLElement>('.line'));
+    const total = words.length;
+    const range = root.querySelector<HTMLInputElement>('[data-range]')!;
+    const nEl = root.querySelector<HTMLElement>('[data-n]')!;
+    const pctEl = root.querySelector<HTMLElement>('[data-pct]')!;
+    const learn = root.querySelector<HTMLButtonElement>('[data-learn]')!;
+    const reset = root.querySelector<HTMLButtonElement>('[data-reset]')!;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let n = 0;
+    let shown = 0;
+    let raf = 0;
+
+    const countTo = (target: number) => {
+      cancelAnimationFrame(raf);
+      if (reduce) { shown = target; pctEl.textContent = String(target); return; }
+      const from = shown, t0 = performance.now(), dur = 420;
+      const step = (t: number) => {
+        const p = Math.min(1, (t - t0) / dur);
+        shown = Math.round(from + (target - from) * (1 - Math.pow(1 - p, 3)));
+        pctEl.textContent = String(shown);
+        if (p < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    const set = (v: number) => {
+      const prev = n;
+      n = Math.max(0, Math.min(total, v));
+      words.forEach((w, i) => {
+        const on = i < n;
+        w.classList.toggle('on', on);
+        w.classList.remove('pop');
+        if (on && i >= prev && !reduce) { void w.offsetWidth; w.classList.add('pop'); }
+      });
+      lines.forEach((l) => l.classList.toggle('done', Array.from(l.querySelectorAll('.w')).every((w) => w.classList.contains('on'))));
+      range.value = String(n);
+      nEl.textContent = String(n);
+      range.setAttribute('aria-valuetext', `${n} de ${total} palabras`);
+      learn.disabled = n >= total;
+      learn.setAttribute('aria-disabled', String(n >= total));
+      root.classList.toggle('complete', n >= total);
+      countTo(Math.round((n / total) * 100));
+    };
+
+    learn.addEventListener('click', () => set(n + 1));
+    reset.addEventListener('click', () => set(0));
+    range.addEventListener('input', () => set(Number(range.value)));
+    set(0);
+  }
+</script>

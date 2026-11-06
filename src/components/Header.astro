@@ -1,0 +1,37 @@
+---
+const links = [
+  ['/#historia', 'El viaje'],
+  ['/#como-funciona', 'Cómo funciona'],
+  ['/juegos', 'Juegos'],
+  ['/design-system', 'Diseño'],
+];
+const path = Astro.url.pathname.replace(/\/$/, '');
+---
+<header class="hd">
+  <div class="wrap hd-in">
+    <a class="brand" href="/" aria-label="Sanuk, inicio">
+      <span class="th brand-th" lang="th">สนุก</span>
+      <span class="brand-en">Sanuk</span>
+    </a>
+    <nav aria-label="Principal">
+      <ul>
+        {links.map(([href, label]) => (
+          <li><a href={href} aria-current={href === path ? 'page' : undefined}>{label}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .hd { position: sticky; top: 0; z-index: 50; background: rgb(243 246 250 / 0.92); backdrop-filter: blur(8px); border-bottom: 2px solid var(--niebla-3); }
+  .hd-in { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px; flex-wrap: wrap; padding: 6px 0; }
+  .brand { display: inline-flex; align-items: baseline; gap: 8px; text-decoration: none; color: var(--tinta); }
+  .brand-th { font-weight: 700; font-size: 1.4rem; color: var(--azafran-hondo); color: #a85d00; }
+  .brand-en { font-family: var(--f-display); font-weight: 700; font-size: 1.5rem; }
+  ul { list-style: none; display: flex; gap: 4px; margin: 0; padding: 0; flex-wrap: wrap; }
+  nav a { display: block; padding: 8px 12px; border-radius: var(--r-pill); font-weight: 800; font-size: .92rem; color: var(--tinta); text-decoration: none; transition: background var(--dur-rapido); }
+  nav a:hover { background: var(--niebla-3); color: var(--tinta); }
+  nav a[aria-current='page'] { background: var(--tinta); color: #fff; }
+  @media (max-width: 480px) { nav a { padding: 6px 9px; font-size: .84rem; } }
+</style>

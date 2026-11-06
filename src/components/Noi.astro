@@ -1,0 +1,52 @@
+---
+import { noiSvg, type NoiPose } from '../brand/noi-art';
+
+interface Props { pose?: NoiPose; size?: number; class?: string; still?: boolean; title?: string; }
+const { pose = 'feliz', size = 240, class: cls = '', still = false, title } = Astro.props;
+
+// ids únicos por instancia: varios SVG en la misma página no deben compartir degradados
+const uid = Math.random().toString(36).slice(2, 8);
+let svg = noiSvg(pose, { size, title }).replace(/noi-(skin2|skin|ear|iris|hat|shirt|shorts|pack|pkm)\b/g, `noi-$1-${uid}`);
+
+// Envolvemos las capas animables en grupos propios para no pisar el transform de cada pose.
+const wrap = (name: string, anim: string) => {
+  svg = svg.replace(new RegExp(`(<g class="noi-${name}"[^>]*>.*?</g>)`), `<g class="a-${anim}">$1</g>`);
+};
+wrap('ear-l', 'ear-l');
+wrap('ear-r', 'ear-r');
+wrap('eyes', pose === 'duerme' || pose === 'celebra' || pose === 'ups' ? 'still' : 'eyes');
+wrap('trunk', 'trunk');
+wrap('hat', 'hat');
+wrap('arm-l', pose === 'hola' ? 'wave' : pose === 'celebra' ? 'cheer-l' : 'still');
+wrap('arm-r', pose === 'celebra' ? 'cheer-r' : 'still');
+wrap('extras', 'float');
+svg = svg.replace(/(<g class="noi-shadow")/, '<g class="a-breathe">$1').replace('</svg>', '</g></svg>');
+---
+<span class:list={['noi', { 'noi-still': still }, cls]} style={`--noi-size:${size}px`} set:html={svg} />
+
+<style is:global>
+  .noi { display: inline-block; line-height: 0; width: var(--noi-size); max-width: 100%; }
+  .noi svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .noi [class^='a-'] { transform-box: view-box; }
+  .noi .a-breathe { transform-origin: 120px 230px; animation: noi-breathe 3.6s ease-in-out infinite; }
+  .noi .a-ear-l { transform-origin: 68px 104px; animation: noi-ear-l 5.2s ease-in-out infinite; }
+  .noi .a-ear-r { transform-origin: 172px 104px; animation: noi-ear-r 5.2s ease-in-out 1.1s infinite; }
+  .noi .a-trunk { transform-origin: 120px 108px; animation: noi-trunk 5s ease-in-out infinite; }
+  .noi .a-eyes { transform-origin: 120px 100px; animation: noi-blink 4s ease-in-out infinite; }
+  .noi .a-hat { transform-origin: 120px 44px; animation: noi-hat 3.6s ease-in-out infinite; }
+  .noi .a-wave { transform-origin: 86px 160px; animation: noi-wave 1.8s ease-in-out infinite; }
+  .noi .a-cheer-l { transform-origin: 86px 160px; animation: noi-cheer 0.9s ease-in-out infinite alternate; }
+  .noi .a-cheer-r { transform-origin: 154px 160px; animation: noi-cheer 0.9s ease-in-out infinite alternate-reverse; }
+  .noi .a-float { animation: noi-float 2.6s ease-in-out infinite alternate; }
+  @keyframes noi-breathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.012, 1.022); } }
+  @keyframes noi-ear-l { 0%, 78%, 100% { transform: rotate(0); } 84% { transform: rotate(-7deg); } 90% { transform: rotate(3deg); } }
+  @keyframes noi-ear-r { 0%, 78%, 100% { transform: rotate(0); } 84% { transform: rotate(7deg); } 90% { transform: rotate(-3deg); } }
+  @keyframes noi-trunk { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(3deg); } }
+  @keyframes noi-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.08); } }
+  @keyframes noi-hat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.5px); } }
+  @keyframes noi-wave { 0%, 60%, 100% { transform: rotate(0); } 15% { transform: rotate(14deg); } 30% { transform: rotate(-8deg); } 45% { transform: rotate(10deg); } }
+  @keyframes noi-cheer { from { transform: rotate(-8deg); } to { transform: rotate(6deg); } }
+  @keyframes noi-float { from { transform: translateY(0); } to { transform: translateY(-4px); } }
+  @media (prefers-reduced-motion: reduce) { .noi [class^='a-'] { animation: none !important; } }
+  .noi-still [class^='a-'] { animation: none !important; }
+</style>

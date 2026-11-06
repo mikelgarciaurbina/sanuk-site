@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Noi from '../components/Noi.astro';
+---
+<Layout title="Te has salido del camino · Sanuk" description="Esta página no existe. Vuelve a la carretera." path="/404">
+  <section class="nf">
+    <div class="wrap">
+      <Noi pose="ups" size={200} />
+      <p class="eyebrow">Error 404</p>
+      <h1>Esta curva no existe</h1>
+      <p class="lead"><span class="th" lang="th">ไม่เป็นไร</span> <span class="rom">mâi pen rai</span>: no pasa nada. Noi conoce el camino de vuelta.</p>
+      <p><a class="btn" href="/">Volver al inicio</a></p>
+    </div>
+  </section>
+</Layout>
+<style>
+  .nf { text-align: center; padding: 64px 0 96px; }
+  .nf :global(.noi) { margin-bottom: 8px; }
+</style>

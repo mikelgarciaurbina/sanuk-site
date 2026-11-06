@@ -1,0 +1,104 @@
+/* Sanuk · tokens (espejo de src/brand/tokens.ts). Cada color tiene nombre de historia. */
+:root {
+  /* fondos: la mañana en la montaña */
+  --niebla: #f3f6fa;
+  --niebla-2: #e8eef5;
+  --niebla-3: #d5deea;
+  --niebla-4: #b7c5d6;
+  --blanco: #ffffff;
+  /* texto: índigo de la camisa mo hom */
+  --tinta: #1d2347;
+  --tinta-2: #4b5378;
+  --tinta-3: #5f6988;
+  /* acción principal: túnicas de los monjes */
+  --azafran: #ffa41b;
+  --azafran-hondo: #d97f06;
+  --azafran-suave: #fff0d6;
+  /* acierto y progreso */
+  --arrozal: #13854f;
+  --arrozal-hondo: #0b5e37;
+  --arrozal-vivo: #2dbe78;
+  --arrozal-suave: #ddf5e8;
+  /* racha: khom loy de Yi Peng */
+  --farol: #ff6a3d;
+  --farol-suave: #ffe6dc;
+  /* recompensa */
+  --buatong: #ffc83d;
+  --buatong-hondo: #c98f00;
+  /* error amable: laca roja Lanna */
+  --laca: #d93a3f;
+  --laca-hondo: #a9262b;
+  --laca-suave: #fde8e8;
+  /* selección y audio */
+  --cielo: #3d7bff;
+  --cielo-hondo: #2257d6;
+  --cielo-suave: #e3ecff;
+  /* textil y noche */
+  --mohom: #2b3a86;
+  --noche: #141936;
+  --noche-2: #232b5c;
+  /* mascota y madera */
+  --noi: #a7b0c8;
+  --teca: #9a5b32;
+  --teca-suave: #f4e6d8;
+  /* paisaje */
+  --monte-1: #c9d6e4;
+  --monte-2: #9cbfb3;
+  --monte-3: #6fa587;
+  --monte-4: #4f8b6b;
+  --alba: #ffe2b8;
+
+  /* los 5 tonos */
+  --tono-m: #8e98b1;
+  --tono-m-on: #1d2347;
+  --tono-m-text: #5f6988;
+  --tono-l: #4555d6;
+  --tono-l-on: #ffffff;
+  --tono-l-text: #3f4fd0;
+  --tono-f: #e2474c;
+  --tono-f-on: #ffffff;
+  --tono-f-text: #c9353b;
+  --tono-h: #ffc23d;
+  --tono-h-on: #1d2347;
+  --tono-h-text: #9a6400;
+  --tono-r: #14a47c;
+  --tono-r-on: #1d2347;
+  --tono-r-text: #0b7a5c;
+
+  /* radios */
+  --r-s: 12px;
+  --r-m: 16px;
+  --r-l: 20px;
+  --r-xl: 24px;
+  --r-xxl: 32px;
+  --r-pill: 999px;
+  /* espacios */
+  --s-xs: 4px;
+  --s-s: 8px;
+  --s-m: 12px;
+  --s-l: 16px;
+  --s-xl: 20px;
+  --s-xxl: 28px;
+  --s-xxxl: 40px;
+
+  /* tipografías */
+  --f-display: 'Fredoka Variable', 'Fredoka', ui-rounded, system-ui, sans-serif;
+  --f-ui: 'Nunito Variable', 'Nunito', system-ui, sans-serif;
+  --f-thai: 'Noto Sans Thai Looped', 'Noto Sans Thai', 'Thonburi', sans-serif;
+
+  /* movimiento: peso y alegría */
+  --dur-tap: 90ms;
+  --dur-rapido: 160ms;
+  --dur-base: 240ms;
+  --dur-lento: 420ms;
+  --dur-historia: 900ms;
+  --dur-niebla: 18s;
+  /* aproximaciones CSS de los muelles de la app */
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-boing: cubic-bezier(0.34, 1.9, 0.5, 1);
+  --ease-trompa: cubic-bezier(0.25, 1.15, 0.5, 1);
+  --ease-suave: cubic-bezier(0.22, 0.8, 0.3, 1);
+
+  --sombra-card: 0 8px 16px rgb(29 35 71 / 0.12);
+  --depth: 5px;
+}

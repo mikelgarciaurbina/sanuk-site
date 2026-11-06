@@ -1,0 +1,484 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Noi from '../components/Noi.astro';
+import { color, tones, motion } from '../brand/tokens';
+import { NOI_POSES, noiParts } from '../brand/noi-art';
+import { toneRows } from '../data/content';
+
+// ——— utilidades de build: contraste y muelles físicos → easing linear() ———
+const lum = (hex: string) => {
+  const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * c[0]! + 0.7152 * c[1]! + 0.0722 * c[2]!;
+};
+const ratio = (a: string, b: string) => {
+  const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
+  return (x! + 0.05) / (y! + 0.05);
+};
+const spring = ({ stiffness: k, damping: c, mass: m }: { stiffness: number; damping: number; mass: number }) => {
+  const dt = 1 / 120; let x = 0, v = 0; const pts: number[] = []; let t = 0;
+  while (t < 1.4) { const a = (-k * (x - 1) - c * v) / m; v += a * dt; x += v * dt; t += dt; if (Math.round(t / dt) % 4 === 0) pts.push(+x.toFixed(3)); }
+  pts.push(1);
+  return { css: `linear(0, ${pts.join(', ')})`, ms: Math.round(t * 1000) };
+};
+const springs = [
+  { id: 'pop', name: 'pop', use: 'Botones, fichas, aciertos. Rápido y con un rebote corto.', p: motion.pop },
+  { id: 'boing', name: 'boing', use: 'Celebraciones y sellos. Se pasa un poco y vuelve: alegría.', p: motion.boing },
+  { id: 'trompa', name: 'trompa', use: 'Noi y movimientos grandes. Lento, pesado, sin rebote: 1.200 kilos.', p: motion.trompa },
+].map((s) => ({ ...s, ...spring(s.p) }));
+
+const swatch = (n: string, key: keyof typeof color, why: string) => ({ n, key, hex: color[key] as string, why });
+const groups = [
+  { t: 'Fondos', d: 'La mañana en la montaña. El fondo nunca compite con lo que aprendes.', items: [
+    swatch('niebla', 'niebla', 'La mañana en las montañas de Mae Hong Son. Es el fondo de todo.'),
+    swatch('niebla 2', 'niebla2', 'La niebla un poco más densa: superficies hundidas y bandas de sección.'),
+    swatch('niebla 3', 'niebla3', 'Bordes y sombras de las tarjetas.'),
+    swatch('niebla 4', 'niebla4', 'La carretera y los detalles tenues del paisaje.'),
+  ] },
+  { t: 'Texto', d: 'Índigo en vez de negro: más cálido, más humano.', items: [
+    swatch('tinta', 'tinta', 'El índigo de la camisa mo hom que se viste en el norte. Todo el texto principal.'),
+    swatch('tinta 2', 'tinta2', 'Texto secundario, siempre por encima de 4,5:1 sobre niebla.'),
+    swatch('tinta 3', 'tinta3', 'Texto terciario y etiquetas pequeñas.'),
+  ] },
+  { t: 'Acción', d: 'Si es azafrán, se toca.', items: [
+    swatch('azafrán', 'azafran', 'Las túnicas de los monjes. Reservado a la acción principal de cada pantalla.'),
+    swatch('azafrán hondo', 'azafranHondo', 'El pliegue de la túnica: la sombra de 5 px que da peso al botón.'),
+    swatch('azafrán suave', 'azafranSuave', 'Fondos cálidos y avisos amables.'),
+  ] },
+  { t: 'Acierto y progreso', d: 'El arrozal después de la lluvia.', items: [
+    swatch('arrozal', 'arrozal', 'Verde de arrozal: acierto y progreso.'),
+    swatch('arrozal hondo', 'arrozalHondo', 'Sombra y texto sobre fondo suave.'),
+    swatch('arrozal vivo', 'arrozalVivo', 'El brote nuevo: barras de progreso.'),
+    swatch('arrozal suave', 'arrozalSuave', 'Fondo de la hoja de acierto.'),
+  ] },
+  { t: 'Racha y recompensa', d: 'Luz en el cielo: farolillos y flores.', items: [
+    swatch('farol', 'farol', 'Los khom loy que suben al cielo en Yi Peng. Es la racha diaria.'),
+    swatch('buatong', 'buatong', 'Los girasoles buatong de Doi Mae U-Kho: recompensas y plátanos.'),
+    swatch('buatong hondo', 'buatongHondo', 'Sombra de las recompensas.'),
+  ] },
+  { t: 'Error amable', d: 'Un rojo que corrige sin gritar.', items: [
+    swatch('laca', 'laca', 'La laca roja Lanna de los templos. Rojo de objeto precioso, no de alarma.'),
+    swatch('laca hondo', 'lacaHondo', 'Texto sobre el fondo suave.'),
+    swatch('laca suave', 'lacaSuave', 'Fondo de la hoja de error.'),
+  ] },
+  { t: 'Selección y audio', d: 'El cielo despejado.', items: [
+    swatch('cielo', 'cielo', 'Lo que está seleccionado y todo lo que suena.'),
+    swatch('cielo hondo', 'cieloHondo', 'Sombra y enlaces.'),
+    swatch('cielo suave', 'cieloSuave', 'Fondo de la ficha seleccionada.'),
+  ] },
+  { t: 'Textil y noche', d: 'Azul de tela y de cielo nocturno.', items: [
+    swatch('mo hom', 'mohom', 'Azul mo hom, la mochila de Noi y las camisas del campo.'),
+    swatch('noche', 'noche', 'Modo noche y pie de página.'),
+    swatch('noche 2', 'noche2', 'Superficies sobre la noche.'),
+  ] },
+  { t: 'Mascota y madera', d: 'Piel de elefanta y teca.', items: [
+    swatch('noi', 'noi', 'La piel de Noi: melocotón, con pecas rosas.'),
+    swatch('teca', 'teca', 'Madera de teca: puentes, tablas y el «tok».'),
+    swatch('teca suave', 'tecaSuave', 'Fondos de madera clara.'),
+  ] },
+  { t: 'Paisaje', d: 'Cuatro montañas y un amanecer. Capas planas, sin degradados.', items: [
+    swatch('monte 1', 'monte1', 'La cresta más lejana, casi niebla.'),
+    swatch('monte 2', 'monte2', 'Verde azulado de la distancia.'),
+    swatch('monte 3', 'monte3', 'La ladera media.'),
+    swatch('monte 4', 'monte4', 'La ladera cercana, la más viva.'),
+    swatch('alba', 'alba', 'El sol de primera hora. Aparece detrás de las montañas.'),
+  ] },
+];
+const poseUse: Record<string, string> = {
+  feliz: 'Estado por defecto y aciertos pequeños.', hola: 'Bienvenida, inicio de sesión del día.', celebra: 'Fin de lección, sellos, racha nueva.',
+  piensa: 'Pistas y preguntas difíciles.', ups: 'Error sin culpa: «no pasa nada».', duerme: 'Racha en pausa, vuelta tras días sin entrar.', escucha: 'Audio y grabación de voz.',
+};
+const nav = ['color', 'tonos', 'tipografia', 'componentes', 'movimiento', 'sonido', 'haptica', 'noi', 'voz'];
+const navL = ['Color', 'Tonos', 'Tipografía', 'Componentes', 'Movimiento', 'Sonido', 'Háptica', 'Noi', 'Voz'];
+const layers = noiParts('feliz').map((p) => p.id);
+---
+<Layout title="Sistema de diseño · Sanuk" description="Por qué cada color, tono, tipografía, componente, movimiento y sonido de Sanuk sale del viaje de Chiang Mai a Mae Hong Son.">
+  <section class="intro">
+    <div class="wrap intro-in">
+      <div>
+        <p class="eyebrow">Sistema de diseño</p>
+        <h1>Todo sale del camino</h1>
+        <p class="lead">Ningún color, sonido ni movimiento de Sanuk está elegido al azar: cada uno viene de algo que verías, oirías o tocarías entre Chiang Mai y Mae Hong Son. Aquí está el porqué.</p>
+      </div>
+      <Noi pose="piensa" size={200} />
+    </div>
+    <nav class="wrap toc" aria-label="Secciones">
+      {nav.map((id, i) => <a class="btn btn-ghost btn-sm" href={`#${id}`}>{navL[i]}</a>)}
+    </nav>
+  </section>
+
+  <!-- COLOR -->
+  <section class="section" id="color">
+    <div class="wrap">
+      <p class="eyebrow">01 · Color</p>
+      <h2>Colores con historia</h2>
+      <p class="lead">Cada color lleva el nombre de lo que lo inspiró. Si alguien duda de qué color usar, pregunta qué pasa en la historia.</p>
+      {groups.map((g) => (
+        <div class="cg">
+          <h3>{g.t}</h3>
+          <p class="cg-d">{g.d}</p>
+          <ul class="sw-list">
+            {g.items.map((s) => {
+              const onT = ratio(s.hex, color.tinta), onW = ratio(s.hex, '#FFFFFF');
+              const fg = onT >= onW ? color.tinta : '#FFFFFF';
+              return (
+                <li class="sw">
+                  <div class="chipc" style={`background:${s.hex};color:${fg}`}><b>{s.n}</b><span class="mono">{s.hex}</span><small>{Math.max(onT, onW).toFixed(1)}:1 con {onT >= onW ? 'tinta' : 'blanco'}</small></div>
+                  <p>{s.why}</p>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- TONOS -->
+  <section class="section alt" id="tonos">
+    <div class="wrap">
+      <p class="eyebrow">02 · Los 5 tonos</p>
+      <h2>Cinco tonos, cinco colores</h2>
+      <p class="lead">En thai, el mismo sonido cambia de significado según el tono. Por eso cada tono tiene su propio color y su propio trazo: el oído se apoya en el ojo.</p>
+      <p>Cada uno combina tres pistas: el <strong>contorno</strong> dibuja cómo sube o baja la voz, el <strong>color</strong> lo distingue de un vistazo y la <strong>palabra de ejemplo</strong> lo ancla a algo real.</p>
+      <div class="table-wrap">
+        <table class="tones">
+          <caption class="sr-only">Los cinco tonos del thai con su color, contorno y palabra de ejemplo</caption>
+          <thead><tr><th scope="col">Tono</th><th scope="col">Contorno</th><th scope="col">Color</th><th scope="col">Ejemplo</th></tr></thead>
+          <tbody>
+            {toneRows.map((r) => {
+              const t = tones[r.id];
+              return (
+                <tr>
+                  <th scope="row">{t.name} <span class="th" lang="th">{t.thai}</span></th>
+                  <td><svg viewBox="0 0 24 14" width="72" height="42" aria-hidden="true"><path d={t.path} fill="none" stroke={t.fill} stroke-width="2.6" stroke-linecap="round" /></svg></td>
+                  <td><span class="tchip" style={`background:${t.fill};color:${t.on}`}><b class="mono">{t.fill}</b></span></td>
+                  <td><span class="th ex" lang="th" style={`color:${t.text}`}>{r.word}</span> <span class="rom">{r.rom}</span> · «{r.es}»</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Los colores de relleno sirven para fichas y contornos. Cuando el tono se escribe como texto sobre blanco se usa una variante más oscura, para cumplir el contraste de 4,5:1.</p>
+    </div>
+  </section>
+
+  <!-- TIPOGRAFÍA -->
+  <section class="section" id="tipografia">
+    <div class="wrap">
+      <p class="eyebrow">03 · Tipografía</p>
+      <h2>Tres voces</h2>
+      <div class="grid g3 type">
+        <article class="card"><p class="eyebrow">Fredoka · 600–700</p><p class="big disp">Thai, curva a curva</p><p>Redondeada y con peso: es la voz de Noi. Titulares, números y momentos de alegría.</p></article>
+        <article class="card"><p class="eyebrow">Nunito · 600–900</p><p class="big ui">Aprende una palabra nueva</p><p>Amable y muy legible en tamaños pequeños. Botones, etiquetas y texto corrido.</p></article>
+        <article class="card"><p class="eyebrow">Noto Sans Thai Looped</p><p class="big th" lang="th">สวัสดี ขอบคุณ</p><p>Todo el texto thai. Los bucles son deliberados (ver abajo).</p></article>
+      </div>
+      <div class="why card">
+        <h3>¿Por qué el thai con «lazos»?</h3>
+        <p>Muchas letras thai se escriben empezando por un bucle: ก, ข, ค, ท. Las fuentes modernas «sin lazos» (como las de las señales de tráfico) los eliminan y parecen más limpias, pero no son lo que se enseña en los colegios tailandeses. Para quien empieza, el bucle es la pista de por dónde empezar el trazo y ayuda a distinguir letras casi iguales como ถ y ภ.</p>
+        <p class="th cmp" lang="th"><span>ก ข ค ท พ ผ ม</span></p>
+        <p class="small">Mostramos el thai siempre con los lazos, aunque la interfaz sea moderna.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPONENTES -->
+  <section class="section alt" id="componentes">
+    <div class="wrap">
+      <p class="eyebrow">04 · Componentes</p>
+      <h2>Piezas con peso</h2>
+      <p class="lead">Todo es redondeado, grueso y táctil. Lo que se toca tiene una sombra inferior de 5 px que se aplasta al pulsar.</p>
+
+      <h3>Botones con profundidad</h3>
+      <p>Pulsa y mantén: el botón baja 4 px y la sombra se colapsa, como una ficha de madera.</p>
+      <div class="demo row">
+        <button class="btn" type="button">Continuar</button>
+        <button class="btn btn-ok" type="button">Comprobar</button>
+        <button class="btn btn-ghost" type="button">Ahora no</button>
+        <button class="btn btn-night" type="button">Modo noche</button>
+        <button class="btn" type="button" disabled>Desactivado</button>
+      </div>
+
+      <h3>Fichas de juego</h3>
+      <p>Una ficha dice siempre lo mismo en cinco estados. El color nunca va solo: el estado también cambia de borde y de símbolo.</p>
+      <div class="demo tiles">
+        {[['normal', 'Normal', 'เสือ', 'tigre', ''], ['sel', 'Seleccionada', 'เสือ', 'tigre', 'Elegida'], ['ok', 'Correcta', 'เสือ', 'tigre', 'Correcta'], ['bad', 'Equivocada', 'เสื้อ', 'camisa', 'Casi'], ['done', 'Hecha', 'เสือ', 'tigre', 'Hecha']].map(([c, l, th, es, tag]) => (
+          <div class="tile-w">
+            <button type="button" class={`tile t-${c}`}>
+              <span class="th" lang="th">{th}</span><span class="tes">{es}</span>
+              {tag && <span class="ttag">{tag}</span>}
+            </button>
+            <small>{l}</small>
+          </div>
+        ))}
+      </div>
+
+      <h3>Chips de recompensa</h3>
+      <div class="demo row">
+        <span class="chip"><img class="lantern" src="/img/ico-farol.svg" alt="" width="28" height="28" />12 días</span>
+        <span class="chip"><img src="/img/ico-platano.svg" alt="" width="28" height="28" />340 plátanos</span>
+        <span class="chip"><img src="/img/ico-sello.svg" alt="" width="28" height="28" />7 sellos</span>
+        <span class="chip"><img src="/img/ico-paraguas.svg" alt="" width="28" height="28" />2 paraguas</span>
+        <span class="chip"><img src="/img/ico-curva.svg" alt="" width="28" height="28" />128 curvas</span>
+      </div>
+      <p class="note">Farolillo: racha diaria. Plátanos: puntos. Sellos: logros. Paraguas de Bo Sang: congela la racha. Curva: progreso.</p>
+
+      <h3>Barra de progreso</h3>
+      <div class="demo">
+        <div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="1864" aria-valuenow="128" aria-label="Progreso del camino">
+          <div class="prog-fill" style="width:7%"></div>
+        </div>
+        <p class="prog-t">Curva <b>128</b> de 1.864</p>
+      </div>
+
+      <h3>Noi habla</h3>
+      <div class="demo noi-say">
+        <Noi pose="celebra" size={120} still />
+        <div class="bubble"><span class="th" lang="th">เก่งมาก!</span> <span class="rom">kèng mâak</span> · ¡qué crack!</div>
+      </div>
+
+      <h3>Hojas de respuesta</h3>
+      <p>La hoja sube desde abajo tras cada respuesta. Nunca reprocha: indica la respuesta y sigue.</p>
+      <div class="grid g2 sheets">
+        <div class="sheet s-ok"><b>¡Muy bien!</b><span><span class="th" lang="th">ข้าว</span> <span class="rom">khâaw</span> · arroz</span><button class="btn btn-ok btn-sm" type="button">Continuar</button></div>
+        <div class="sheet s-bad"><b>Casi.</b><span>Se dice <span class="th" lang="th">ข้าว</span> <span class="rom">khâaw</span>. <span class="th" lang="th">ไม่เป็นไร</span>, no pasa nada.</span><button class="btn btn-sm" type="button" style="--bg:var(--laca);--deep:var(--laca-hondo);--fg:#fff">Entendido</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOVIMIENTO -->
+  <section class="section" id="movimiento">
+    <div class="wrap">
+      <p class="eyebrow">05 · Movimiento</p>
+      <h2>Peso y alegría</h2>
+      <p class="lead">Noi pesa 1.200 kilos y es feliz. Todo se mueve como algo grande y contento: arranca con peso, llega con un pequeño rebote y se detiene sin prisa.</p>
+      <div class="grid g3">
+        {springs.map((s) => (
+          <article class="card spring">
+            <h3>{s.name}</h3>
+            <p class="mono">rigidez {s.p.stiffness} · amortig. {s.p.damping}</p>
+            <div class="track"><span class="ball" style={`--ease:${s.css};--t:${s.ms}ms`}></span></div>
+            <p>{s.use}</p>
+            <button class="btn btn-ghost btn-sm" type="button" data-play>Probar</button>
+          </article>
+        ))}
+      </div>
+      <h3 class="sp">Duraciones</h3>
+      <ul class="durs">
+        {[['tap', motion.dur.tap, 'Pulsar un botón'], ['rápido', motion.dur.rapido, 'Cambios de estado'], ['base', motion.dur.base, 'Entradas y salidas'], ['lento', motion.dur.lento, 'La niebla que se despeja'], ['historia', motion.dur.historia, 'Momentos de la historia']].map(([n, ms, u]) => (
+          <li><b>{n}</b><span class="mono">{ms} ms</span><span>{u}</span><i style={`width:${Math.max(6, Number(ms) / 9)}%`}></i></li>
+        ))}
+      </ul>
+      <div class="grid g2 sp">
+        <article class="card"><h3>La niebla: {motion.nieblaMs / 1000} s</h3><p>La niebla deriva de lado a lado en {motion.nieblaMs / 1000} segundos. Es tan lenta que casi no se nota, como en la montaña.</p><div class="mist-demo" aria-hidden="true"><i></i><i></i></div></article>
+        <article class="card"><h3>Movimiento reducido</h3><p>Si el sistema pide menos movimiento, desaparecen la niebla, los parpadeos, las orejas y los rebotes. Se conservan los cambios de estado, sin animar.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SONIDO -->
+  <section class="section alt" id="sonido">
+    <div class="wrap">
+      <p class="eyebrow">06 · Sonido</p>
+      <h2>Suena a ranat</h2>
+      <p class="lead">El ranat es el xilófono de madera de la música tradicional thai. Usamos su escala pentatónica: suene lo que suene, siempre queda bien.</p>
+      <div class="grid g2 snd">
+        <article class="card"><h3>Acierto</h3><p>Dos notas que suben, como una pregunta con respuesta.</p><button class="btn btn-sm" type="button" data-snd="ok">Escuchar</button></article>
+        <article class="card"><h3>Error</h3><p>Un «tok» suave de madera. Sin zumbido ni buzzer: solo «inténtalo otra vez».</p><button class="btn btn-sm" type="button" data-snd="bad">Escuchar</button></article>
+        <article class="card"><h3>Racha</h3><p>La campana de un templo, larga y cálida, cuando el farolillo sigue encendido.</p><button class="btn btn-sm" type="button" data-snd="streak">Escuchar</button></article>
+        <article class="card"><h3>Fin de capítulo</h3><p>Un gong grave que cierra el tramo: llegaste a otra parada.</p><button class="btn btn-sm" type="button" data-snd="gong">Escuchar</button></article>
+      </div>
+      <p class="note">Las demos se sintetizan en tu navegador y solo suenan cuando pulsas. Los sonidos reales de la app son archivos propios.</p>
+    </div>
+  </section>
+
+  <!-- HÁPTICA -->
+  <section class="section" id="haptica">
+    <div class="wrap">
+      <p class="eyebrow">07 · Háptica</p>
+      <h2>Se siente antes de verse</h2>
+      <p class="lead">La vibración repite lo que dicen el sonido y el movimiento, nunca lo sustituye. Siempre se puede desactivar.</p>
+      <div class="table-wrap"><table class="plain">
+        <thead><tr><th scope="col">Momento</th><th scope="col">Sensación</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Pulsar un botón</th><td>Toque ligero, como una ficha sobre la mesa.</td></tr>
+          <tr><th scope="row">Acierto</th><td>Un toque limpio y firme.</td></tr>
+          <tr><th scope="row">Error</th><td>Dos toques suaves, nunca un golpe.</td></tr>
+          <tr><th scope="row">Racha</th><td>Un pulso medio, como una campana lejana.</td></tr>
+          <tr><th scope="row">Fin de capítulo</th><td>Un pulso largo que se apaga.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- NOI -->
+  <section class="section alt" id="noi">
+    <div class="wrap">
+      <p class="eyebrow">08 · Noi</p>
+      <h2>Anatomía de una elefanta pequeña</h2>
+      <div class="anat">
+        <div class="anat-fig"><Noi pose="feliz" size={300} /></div>
+        <ol class="anat-list">
+          <li><b>Cabeza grande y ojos enormes.</b> Tres brillos en cada ojo y pestañas largas: se le nota todo lo que siente.</li>
+          <li><b>Orejas grandes con pecas rosas.</b> Las pecas son un rasgo real de las elefantas asiáticas mayores.</li>
+          <li><b>Sin colmillos.</b> Como la mayoría de las elefantas asiáticas.</li>
+          <li><b>Sombrero de exploradora con frangipani.</b> La flor blanca de los templos (ลีลาวดี) prendida en la cinta.</li>
+          <li><b>Pañuelo pha khao ma.</b> La tela de cuadros que se lleva en todo el país, anudada al cuello.</li>
+          <li><b>Mochila índigo de rayas Lanna.</b> Llena de plátanos, por si el camino se alarga.</li>
+        </ol>
+      </div>
+      <p>Cada capa del dibujo tiene su clase, para animarla por separado: {layers.map((l, i) => <><code>noi-{l.replace(/([A-Z])/g, (m) => '-' + m.toLowerCase())}</code>{i < layers.length - 1 ? ', ' : '.'}</>)}</p>
+      <h3 class="sp">Siete poses</h3>
+      <ul class="poses">
+        {NOI_POSES.map((p) => <li><Noi pose={p} size={130} still /><b>{p}</b><span>{poseUse[p]}</span></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- VOZ -->
+  <section class="section" id="voz">
+    <div class="wrap">
+      <p class="eyebrow">09 · Voz y tono</p>
+      <h2>Cómo habla Sanuk</h2>
+      <p class="lead">Curiosa, cálida y nunca regaña. Habla como una amiga que ya conoce el camino y que te lo cuenta sin prisa.</p>
+      <div class="grid g3">
+        <article class="card"><h3>Hablamos de tú</h3><p>En español de España, cercano y directo. Con humor suave y cero sermones.</p></article>
+        <article class="card"><h3>Celebramos lo pequeño</h3><p>Una palabra aprendida ya es una curva menos. Noi lo dice así: <span class="th" lang="th">เก่งมาก!</span> «¡qué crack!»</p></article>
+        <article class="card"><h3>Los fallos no se castigan</h3><p>Nada de «incorrecto» ni «fallaste». Se dice la respuesta y se sigue: <span class="th" lang="th">ไม่เป็นไร</span>.</p></article>
+      </div>
+      <div class="table-wrap sp"><table class="plain vt">
+        <thead><tr><th scope="col">Evitamos</th><th scope="col">Decimos</th></tr></thead>
+        <tbody>
+          <tr><td class="no">Respuesta incorrecta.</td><td class="yes">Casi. Se dice <span class="th" lang="th">ข้าว</span>.</td></tr>
+          <tr><td class="no">Has perdido una vida.</td><td class="yes">No pasa nada, otra vez.</td></tr>
+          <tr><td class="no">¡Vuelve o perderás tu racha!</td><td class="yes">El farolillo te espera.</td></tr>
+          <tr><td class="no">Nivel completado.</td><td class="yes">Otra curva menos. Ya casi huele a café.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .intro { padding-top: 40px; }
+  .intro-in { display: grid; gap: 12px; align-items: center; }
+  @media (min-width: 760px) { .intro-in { grid-template-columns: 1.4fr 1fr; } .intro-in :global(.noi) { justify-self: center; } }
+  .toc { display: flex; flex-wrap: wrap; gap: 10px; padding-block: 24px 8px; }
+  .alt { background: var(--blanco); }
+  .alt .card { background: var(--niebla); box-shadow: 0 4px 0 var(--niebla-3); }
+  .sp { margin-top: 44px; }
+  .note, .small { font-size: .92rem; color: var(--tinta-2); }
+  .cg { margin-top: 44px; }
+  .cg h3 { margin-bottom: .1em; }
+  .cg-d { color: var(--tinta-2); }
+  .sw-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+  .chipc { border-radius: var(--r-l); padding: 16px; min-height: 108px; display: grid; align-content: space-between; box-shadow: inset 0 0 0 2px rgb(29 35 71 / .08); }
+  .chipc b { font-family: var(--f-display); font-size: 1.15rem; }
+  .chipc small { font-weight: 800; }
+  .sw p { margin: 8px 4px 0; font-size: .95rem; color: var(--tinta-2); }
+  .table-wrap { overflow-x: auto; margin: 24px 0 12px; border-radius: var(--r-l); }
+  table { border-collapse: collapse; width: 100%; background: var(--blanco); min-width: 520px; }
+  .alt table { background: var(--niebla); }
+  th, td { text-align: left; padding: 14px 16px; border-bottom: 2px solid var(--niebla-3); vertical-align: middle; }
+  thead th { font-weight: 900; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--tinta-2); }
+  .tchip { display: inline-block; padding: 6px 14px; border-radius: var(--r-pill); }
+  .ex { font-size: 1.8rem; font-weight: 700; }
+  .type .big { font-size: 1.8rem; line-height: 1.2; margin: 0 0 .5em; }
+  .type .disp { font-family: var(--f-display); font-weight: 700; }
+  .type .ui { font-weight: 800; }
+  .why { margin-top: 24px; }
+  .cmp { font-size: 2.6rem; margin: .2em 0; color: var(--mohom); font-weight: 700; }
+  .demo { background: var(--blanco); border-radius: var(--r-xl); padding: 24px; margin: 12px 0 8px; box-shadow: 0 4px 0 var(--niebla-3); }
+  .alt .demo { background: var(--niebla); box-shadow: 0 4px 0 var(--niebla-3); }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+  h3 + p { margin-top: 0; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 18px; }
+  .tile-w { display: grid; gap: 8px; justify-items: center; text-align: center; }
+  .tile { all: unset; box-sizing: border-box; width: 100%; cursor: pointer; display: grid; justify-items: center; gap: 2px; padding: 16px 8px; border-radius: var(--r-l); background: var(--blanco); border: 2px solid var(--niebla-3); box-shadow: 0 4px 0 var(--niebla-4); position: relative; transition: transform var(--dur-tap), box-shadow var(--dur-tap); }
+  .tile:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--niebla-4); }
+  .tile:focus-visible { outline: 3px solid var(--cielo); outline-offset: 3px; }
+  .tile .th { font-size: 2rem; font-weight: 700; }
+  .tile .tes { font-weight: 800; color: var(--tinta-2); }
+  .ttag { font-size: .72rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; margin-top: 4px; padding: 2px 10px; border-radius: var(--r-pill); }
+  .t-sel { background: var(--cielo-suave); border: 3px solid var(--cielo); box-shadow: 0 4px 0 var(--cielo-hondo); }
+  .t-sel .ttag { background: var(--cielo); color: #fff; }
+  .t-ok { background: var(--arrozal-suave); border: 3px solid var(--arrozal); box-shadow: 0 4px 0 var(--arrozal-hondo); }
+  .t-ok .ttag { background: var(--arrozal); color: #fff; }
+  .t-bad { background: var(--laca-suave); border: 3px solid var(--laca); box-shadow: 0 4px 0 var(--laca-hondo); }
+  .t-bad .ttag { background: var(--laca); color: #fff; }
+  .t-done { background: var(--niebla-2); border: 2px dashed var(--niebla-4); box-shadow: none; opacity: .85; }
+  .t-done .ttag { background: var(--niebla-4); color: var(--tinta); }
+  .lantern { animation: float 3.6s ease-in-out infinite; }
+  @keyframes float { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-5px) rotate(2deg); } }
+  .prog { height: 22px; background: var(--niebla-3); border-radius: var(--r-pill); overflow: hidden; box-shadow: inset 0 2px 0 rgb(29 35 71 / .08); }
+  .prog-fill { height: 100%; background: var(--arrozal-vivo); border-radius: var(--r-pill); box-shadow: inset 0 -4px 0 var(--arrozal); min-width: 22px; }
+  .prog-t { margin: 8px 0 0; font-weight: 800; }
+  .noi-say { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .noi-say .bubble { margin-left: 8px; }
+  .sheets { margin-top: 16px; }
+  .sheet { border-radius: var(--r-xl) var(--r-xl) 0 0; padding: 20px; display: grid; gap: 8px; justify-items: start; }
+  .sheet b { font-family: var(--f-display); font-size: 1.3rem; }
+  .s-ok { background: var(--arrozal-suave); color: var(--arrozal-hondo); border-top: 4px solid var(--arrozal); }
+  .s-bad { background: var(--laca-suave); color: var(--laca-hondo); border-top: 4px solid var(--laca); }
+  .s-ok .rom, .s-bad .rom { color: inherit; }
+  .spring .track { position: relative; height: 56px; background: var(--niebla-2); border-radius: var(--r-pill); margin: 12px 0; }
+  .ball { position: absolute; left: 8px; top: 8px; width: 40px; height: 40px; border-radius: 50%; background: var(--azafran); box-shadow: 0 3px 0 var(--azafran-hondo); transition: transform var(--t) var(--ease); }
+  .ball.go { transform: translateX(var(--dist, 200px)); }
+  .durs { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 10px; }
+  .durs li { display: grid; grid-template-columns: 90px 80px 1fr; gap: 8px 12px; align-items: center; position: relative; padding-bottom: 12px; }
+  .durs i { grid-column: 1 / -1; display: block; height: 8px; border-radius: 4px; background: var(--azafran); }
+  @media (min-width: 720px) { .durs li { grid-template-columns: 90px 90px 240px 1fr; padding-bottom: 0; } .durs i { grid-column: auto; } }
+  .mist-demo { height: 56px; background: var(--monte-1); border-radius: var(--r-l); position: relative; overflow: hidden; }
+  .mist-demo i { position: absolute; height: 18px; width: 60%; border-radius: 9px; background: #fff; opacity: .65; top: 10px; animation: md 18s ease-in-out infinite alternate; }
+  .mist-demo i + i { top: 32px; opacity: .55; animation-direction: alternate-reverse; animation-duration: 24s; }
+  @keyframes md { from { transform: translateX(-10%); } to { transform: translateX(70%); } }
+  .snd button { margin-top: 4px; }
+  .anat { display: grid; gap: 28px; align-items: center; }
+  @media (min-width: 820px) { .anat { grid-template-columns: auto 1fr; gap: 56px; } }
+  .anat-fig { justify-self: center; background: var(--niebla); border-radius: var(--r-xxl); padding: 20px; }
+  .anat-list { margin: 0; padding-left: 1.3em; display: grid; gap: 10px; }
+  .poses { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .poses li { background: var(--niebla); border-radius: var(--r-xl); padding: 14px; display: grid; justify-items: center; text-align: center; gap: 4px; font-size: .9rem; }
+  .poses li b { font-family: var(--f-display); font-size: 1.1rem; }
+  .poses li span { color: var(--tinta-2); }
+  .poses :global(.noi) { max-width: 130px; width: 100%; }
+  .vt .no { color: var(--laca-hondo); } .vt .yes { color: var(--arrozal-hondo); font-weight: 800; }
+  .vt .no::before { content: 'No: '; font-weight: 900; } .vt .yes::before { content: 'Sí: '; font-weight: 900; }
+</style>
+
+<script>
+  // Muelles: calculamos la distancia disponible y alternamos la posición.
+  document.querySelectorAll<HTMLElement>('[data-play]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const ball = btn.closest('.spring')!.querySelector<HTMLElement>('.ball')!;
+      const track = ball.parentElement!;
+      ball.style.setProperty('--dist', `${track.clientWidth - 56}px`);
+      ball.classList.toggle('go');
+    });
+  });
+
+  // Sonido: síntesis simple y pentatónica, solo tras un clic.
+  let ctx: AudioContext | null = null;
+  const pent = [0, 2, 4, 7, 9]; // pentatónica mayor
+  const f = (deg: number, base = 523.25) => base * Math.pow(2, (pent[deg % 5]! + 12 * Math.floor(deg / 5)) / 12);
+  function tone(freq: number, t: number, dur: number, type: OscillatorType, vol: number, partials = 1) {
+    if (!ctx) return;
+    for (let p = 1; p <= partials; p++) {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = type; o.frequency.value = freq * (p === 1 ? 1 : p * 1.5 + 0.5);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol / (p * p), t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur / (p === 1 ? 1 : p * 0.7));
+      o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + dur + 0.1);
+    }
+  }
+  function play(kind: string) {
+    ctx ??= new AudioContext();
+    const t = ctx.currentTime + 0.02;
+    if (kind === 'ok') { tone(f(0), t, 0.35, 'triangle', 0.22, 2); tone(f(2), t + 0.13, 0.55, 'triangle', 0.22, 2); }
+    if (kind === 'bad') { tone(190, t, 0.12, 'sine', 0.3); tone(380, t, 0.06, 'triangle', 0.1); }
+    if (kind === 'streak') { tone(f(3, 392), t, 2.2, 'sine', 0.2, 4); }
+    if (kind === 'gong') { tone(f(0, 98), t, 3, 'sine', 0.3, 4); }
+  }
+  document.querySelectorAll<HTMLElement>('[data-snd]').forEach((b) => b.addEventListener('click', () => play(b.dataset.snd!)));
+</script>
