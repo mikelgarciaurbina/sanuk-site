@@ -21,20 +21,20 @@ export const letter: Line[] = [
 ];
 
 export const stops = [
-  ['Chiang Mai · Puerta Tha Phae', 'saludos y cortesía'],
-  ['Mercado de Warorot', 'números, dinero y comida'],
+  ['Chiang Mai · Puerta Tha Phae', 'saludos, cortesía y quién te espera arriba'],
+  ['Mercado de Warorot', 'números hasta 100, dinero y comida'],
   ['Mae Taeng · el santuario de Noi', 'animales, colores y cuerpo'],
   ['Carretera 1095 · primeras curvas', 'direcciones, viajes y tiempo'],
   ['Pai · el valle', 'gustos, sentimientos y preguntas'],
-  ['Cueva Tham Lod', 'el alfabeto'],
   ['Mirador Kiew Lom · mar de niebla', 'clima, naturaleza, días y horas'],
-  ['Puente de bambú Su Tong Pae', 'tonos y marcas de tono'],
-  ['Mae Hong Son · lago Chong Kham', 'templos, cortesía, pasado y futuro'],
-  ['Ban Rak Thai', 'clasificadores, comparar y pedir'],
-  ['El pueblo en la niebla', 'la familia y la casa'],
-  ['La cocina de Mae', 'sabores, ingredientes y recetas'],
-  ['Las historias de Yai', 'narrar, conectores y refranes'],
-  ['La ceremonia del hilo blanco', 'sentimientos, registro formal y bendiciones'],
+  ['Cueva Tham Lod', 'el alfabeto: consonantes y vocales'],
+  ['Puente de bambú Su Tong Pae', 'los cinco tonos y sus reglas'],
+  ['Mae Hong Son · lago Chong Kham', 'templos, tiempos del verbo y la primera llamada'],
+  ['Ban Rak Thai · las últimas curvas', 'clasificadores, comparar y pedir'],
+  ['El pueblo en la niebla · curva 1.864', 'la familia, la casa y la rutina'],
+  ['La cocina de Mae', 'sabores y cocina del norte'],
+  ['Las historias de Yai', 'conectores, pasado y refranes'],
+  ['La ceremonia del hilo blanco', 'sentimientos, respeto y bendiciones'],
 ] as const;
 
 /** Temporada 2: un año en el pueblo (mes, mes en thai, título, temas). */
@@ -68,36 +68,36 @@ export const gameGroups: { id: string; name: string; blurb: string; trains: stri
   {
     id: 'oido', name: 'Oído y tonos', blurb: 'Para que te entiendan a la primera.', trains: 'oído',
     games: [
-      { n: 6, name: 'Oído de elefante', line: 'Escucha y elige la imagen.', trains: 'Comprensión oral' },
-      { n: 7, name: 'Trompa de tonos', line: 'Reconoce el tono que suena.', trains: 'Los 5 tonos' },
+      { n: 6, name: 'Oído de elefante', line: 'Escucha y elige lo que has oído: primero con dibujos, luego solo en thai.', trains: 'Comprensión oral' },
+      { n: 7, name: 'Trompa de tonos', line: 'Escucha la melodía de cada sílaba y adivina su tono.', trains: 'Los 5 tonos' },
       { n: 8, name: '¿Tigre o camisa?', line: 'Pares mínimos: เสือ sʉ̌a tigre / เสื้อ sʉ̂a camisa.', trains: 'Tonos y pares mínimos', thai: 'เสือ' },
-      { n: 9, name: 'Eco', line: 'Graba tu voz y compárala.', trains: 'Pronunciación' },
+      { n: 9, name: 'Eco', line: 'Repite como Noi y mira si tu tono sube y baja como el suyo.', trains: 'Pronunciación y tonos' },
     ],
   },
   {
     id: 'frases', name: 'Frases', blurb: 'De palabras sueltas a conversación.', trains: 'gramática',
     games: [
       { n: 10, name: 'Puente de bambú', line: 'Ordena palabras: cada una es una tabla del puente.', trains: 'Orden de la frase' },
-      { n: 11, name: 'La palabra perdida', line: 'Completa la frase.', trains: 'Gramática en contexto' },
-      { n: 12, name: 'Cestas del mercado', line: 'Clasificadores ตัว, คน, ใบ, ลูก, อัน.', trains: 'Clasificadores', thai: 'ตัว' },
-      { n: 13, name: 'Noi dice', line: 'Toca la parte del cuerpo de Noi que te piden en thai. Su izquierda es tu derecha.', trains: 'Comprensión y cuerpo' },
+      { n: 11, name: 'La palabra perdida', line: 'Completa la frase, caza al intruso y enciende el farolillo.', trains: 'Gramática en contexto' },
+      { n: 12, name: 'Cestas del mercado', line: 'Lanza cada cosa a la cesta de su clasificador: ตัว, คน, ใบ, ลูก, ดอก…', trains: 'Clasificadores', thai: 'ตัว' },
+      { n: 13, name: 'Noi dice', line: 'Escucha la orden de Noi y toca la parte del cuerpo. ¡Ojo con las trampas!', trains: 'Comprensión oral y cuerpo' },
     ],
   },
   {
     id: 'vida-real', name: 'Vida real', blurb: 'Lo que vas a hacer allí arriba.', trains: 'situaciones',
     games: [
-      { n: 14, name: 'Paga justo', line: 'Paga con baht reales: 20 verde, 50 azul, 100 rojo.', trains: 'Dinero y números' },
-      { n: 15, name: 'Cena familiar', line: 'Conversa con la familia.', trains: 'Conversación' },
-      { n: 16, name: '1.864 curvas', line: 'Juego firma: responde tocando la señal izquierda o derecha para tomar cada curva.', trains: 'Direcciones y reflejos' },
+      { n: 14, name: 'Paga justo', line: 'Escucha el precio, paga con baht de verdad, regatea y dilo tú.', trains: 'Dinero y números' },
+      { n: 15, name: 'Cena familiar', line: 'Escucha a la familia y contéstale en thai: en la mesa, por teléfono o en el arrozal.', trains: 'Conversación y oído' },
+      { n: 16, name: '1.864 curvas', line: 'Juego firma: elige la señal antes de cada curva. Una de cada cuatro es de tono.', trains: 'Velocidad y tonos' },
     ],
   },
   {
     id: 'letras', name: 'Letras', blurb: 'El alfabeto, sin miedo.', trains: 'lectura y escritura',
     games: [
-      { n: 17, name: 'Cueva de las letras', line: 'Linterna en la cueva Tham Lod.', trains: 'Reconocer consonantes' },
-      { n: 18, name: 'Une los puntos', line: 'Traza letras empezando por el bucle.', trains: 'Trazo y escritura' },
-      { n: 19, name: 'Bloques de sílabas', line: 'Consonante, vocal y tono.', trains: 'Formar sílabas' },
-      { n: 20, name: 'Cuentos de Yai', line: 'Lectura con audio, toca para traducir.', trains: 'Lectura' },
+      { n: 17, name: 'Cueva de las letras', line: 'Linterna en la cueva Tham Lod: busca cada letra por su nombre, su sonido o su clase.', trains: 'Consonantes y vocales' },
+      { n: 18, name: 'Une los puntos', line: 'Traza cada letra empezando por el bucle; al final, de memoria.', trains: 'Trazo y escritura' },
+      { n: 19, name: 'Bloques de sílabas', line: 'Monta lo que oyes y lee lo que ves: clase + final + marca = tono.', trains: 'Leer y reglas de tono' },
+      { n: 20, name: 'Cuentos de Yai', line: 'Lee los cuentos de Yai: toca, escucha y responde.', trains: 'Lectura' },
     ],
   },
 ];
