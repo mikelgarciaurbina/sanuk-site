@@ -3,9 +3,20 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-interface Props { title: string; description: string; path?: string; }
-const { title, description, path = Astro.url.pathname } = Astro.props;
-const canonical = new URL(path, Astro.site ?? Astro.url).href;
+interface Props { title: string; description: string; path?: string; noindex?: boolean; }
+const { title, description, path = Astro.url.pathname, noindex = false } = Astro.props;
+const canonical = Astro.site ? new URL(path === '/' ? '/' : `${path.replace(/\/$/, '')}/`, Astro.site).href : undefined;
+const image = new URL('/img/social-card.png', Astro.site ?? Astro.url).href;
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Sanuk',
+  applicationCategory: 'EducationalApplication',
+  operatingSystem: 'iOS, Android',
+  inLanguage: 'es',
+  description: 'Aprende tailandés desde el español con una historia, lecciones cortas y veinte juegos.',
+  ...(Astro.site ? { url: Astro.site.href } : {}),
+};
 ---
 <!doctype html>
 <html lang="es">
@@ -16,21 +27,31 @@ const canonical = new URL(path, Astro.site ?? Astro.url).href;
     <meta name="description" content={description} />
     <meta name="theme-color" content="#F3F6FA" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href={canonical} />
+    {canonical && !noindex && <link rel="canonical" href={canonical} />}
+    {(noindex || !Astro.site) && <meta name="robots" content="noindex, follow" />}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_ES" />
     <meta property="og:site_name" content="Sanuk" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sanuk. Thai, curva a curva. Aprende tailandés desde el español." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={image} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    {path === '/' && <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />}
   </head>
   <body>
     <a class="skip" href="#main">Saltar al contenido</a>
     <Header />
-    <main id="main"><slot /></main>
+    <main id="main" tabindex="-1"><slot /></main>
     <Footer />
+    <script>
+      import '../scripts/motion';
+    </script>
   </body>
 </html>

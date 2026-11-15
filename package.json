@@ -5,10 +5,8 @@
   "private": true,
   "scripts": {
     "sync-brand": "node scripts/sync-brand.mjs",
-    "predev": "node scripts/sync-brand.mjs",
-    "dev": "astro dev",
-    "prebuild": "node scripts/sync-brand.mjs",
-    "build": "astro build",
+    "dev": "node scripts/sync-brand.mjs && astro dev",
+    "build": "node scripts/sync-brand.mjs && astro build",
     "preview": "astro preview",
     "check": "astro check"
   },

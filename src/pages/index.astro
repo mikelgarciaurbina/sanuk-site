@@ -26,25 +26,26 @@ const gear = [
 const poseTxt: Record<string, string> = { feliz: 'Feliz', hola: 'Saluda', celebra: 'Celebra', piensa: 'Piensa', ups: 'Ups', duerme: 'Duerme', escucha: 'Escucha' };
 ---
 <Layout
-  title="Sanuk · Thai, curva a curva"
+  title="Aprende tailandés desde el español jugando · Sanuk"
   description="Aprende thai jugando, para hispanohablantes. 1.864 curvas de Chiang Mai a Mae Hong Son, una carta de Yai por entender y Noi, la elefanta, de guía."
 >
   <section class="hero">
     <div class="wrap hero-in">
       <div class="hero-txt">
-        <p class="eyebrow">Aprende thai jugando</p>
-        <h1><span class="th hero-th" lang="th">สนุก</span><span class="hero-wm">Sanuk</span></h1>
+        <p class="eyebrow">Sanuk · aprende tailandés jugando</p>
+        <h1>Hay una familia<br />esperando <span class="hero-accent">entenderte.</span></h1>
         <p class="tag">Thai, curva a curva.</p>
-        <p class="lead">Una app para aprender thai si hablas español. Lecciones de 3 a 5 minutos, veinte juegos y una carta que, palabra a palabra, vas a poder leer.</p>
+        <p class="lead">De tus primeras palabras a conversar con ellos. Aprende thai desde el español con Noi, veinte juegos y una carta que se despeja palabra a palabra.</p>
         <div class="cta">
-          <a class="btn" href="#historia">Conoce el viaje</a>
-          <a class="btn btn-ghost" href="#juegos">Ver los 20 juegos</a>
+          <a class="btn" href="#carta">Prueba la carta de Yai</a>
+          <a class="btn btn-ghost" href="#historia">Conoce el viaje <span aria-hidden="true">↗</span></a>
         </div>
-        <p class="soon">Muy pronto en iOS y Android.</p>
+        <p class="soon">3–5 minutos por lección · Muy pronto en iOS y Android</p>
       </div>
       <div class="hero-noi">
         <div class="bubble"><span class="th" lang="th">สวัสดี!</span> <span class="rom">sà-wàt-dii</span> · ¡hola!</div>
-        <Noi pose="hola" size={300} title="Noi, la elefanta, te saluda" />
+        <div class="hero-orbit" aria-hidden="true"><span>Chiang Mai</span><span>1.864 curvas</span><span>Mae Hong Son</span></div>
+        <Noi pose="hola" size={360} title="Noi, la elefanta, te saluda" />
       </div>
     </div>
     <Landscape />
@@ -68,7 +69,7 @@ const poseTxt: Record<string, string> = { feliz: 'Feliz', hola: 'Saluda', celebr
   <section class="section letter" id="carta">
     <div class="wrap">
       <p class="eyebrow">La carta de Yai</p>
-      <h2>Ahora mismo no entiendes nada. Pruébalo.</h2>
+      <h2>Empieza con una palabra.<br />Acaba leyendo su carta.</h2>
       <p class="lead">Esta es la carta tal como llega: todo en niebla. Aprende una palabra y mira cómo se despeja.</p>
       <LetterDemo />
     </div>
@@ -139,7 +140,7 @@ const poseTxt: Record<string, string> = { feliz: 'Feliz', hola: 'Saluda', celebr
     <div class="wrap">
       <p class="eyebrow">Temporada 2 · hacia el B1</p>
       <h2>Un año en el pueblo</h2>
-      <p class="lead">Después del hilo blanco, la familia te invita a quedarte. Doce lunas de vida en Mae Hong Son: cada mes, siete lecciones con las palabras que más usan los tailandeses y una misión para practicar de verdad con tu pareja o con la familia.</p>
+      <p class="lead">Prometiste volver. Ahora regresas con tu pareja para pasar un año en el pueblo. Doce lunas de vida en Mae Hong Son: cada mes, siete lecciones y una misión para practicar de verdad con la familia.</p>
       <ol class="moons">
         {moons.map(([month, th, title, topic], i) => (
           <li class="card lift">
@@ -204,13 +205,20 @@ const poseTxt: Record<string, string> = { feliz: 'Feliz', hola: 'Saluda', celebr
   .hero { position: relative; overflow: hidden; padding-top: clamp(28px, 6vw, 72px); background: var(--niebla); }
   .hero-in { position: relative; z-index: 2; display: grid; gap: 8px; align-items: end; padding-bottom: clamp(70px, 14vw, 190px); }
   @media (min-width: 880px) { .hero-in { grid-template-columns: 1.15fr 1fr; align-items: center; } }
-  h1 { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 20px; margin-bottom: .2em; }
+  h1 { font-size: clamp(2.5rem, 5.3vw, 4.1rem); line-height: 1.06; margin-bottom: .35em; }
+  .hero-accent { color: var(--arrozal-hondo); }
   .hero-th { font-size: 1.1em; font-weight: 700; color: #a85d00; }
   .hero-wm { font-family: var(--f-display); }
   .tag { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.5rem, 4.4vw, 2.1rem); margin: 0 0 .6em; }
   .cta { display: flex; flex-wrap: wrap; gap: 14px; margin: 24px 0 18px; }
-  .soon { display: inline-block; background: var(--azafran-suave); border-radius: var(--r-pill); padding: 6px 16px; font-weight: 900; font-size: .9rem; margin: 0; }
-  .hero-noi { display: grid; justify-items: center; gap: 4px; position: relative; }
+  .soon { font-weight: 800; font-size: .85rem; color: var(--tinta-2); margin: 0; }
+  .hero-noi { display: grid; justify-items: center; gap: 4px; position: relative; padding-top: 20px; }
+  .hero-orbit { position: absolute; inset: 18% 0 6%; border: 2px dashed #9cbfb3; border-radius: 50%; transform: rotate(-12deg); }
+  .hero-orbit span { position: absolute; background: #fffdf7; color: var(--arrozal-hondo); border: 1px solid #9cbfb3; border-radius: 999px; padding: 6px 12px; font-size: .75rem; font-weight: 900; box-shadow: 0 3px 0 var(--niebla-3); }
+  .hero-orbit span:nth-child(1) { left: 0; bottom: 16%; }
+  .hero-orbit span:nth-child(2) { right: -2%; top: 28%; }
+  .hero-orbit span:nth-child(3) { right: 9%; bottom: -4%; }
+  @media (max-width: 879px) { .hero-noi { width: min(400px, 100%); justify-self: center; margin-top: 12px; } .hero-noi :global(.noi) { width: 260px; } }
   .hero-noi .bubble { justify-self: start; margin-left: 12%; }
   .hero :global(.ls) { position: absolute; bottom: 0; left: 0; z-index: 1; height: clamp(150px, 26vw, 380px); }
   .hero-noi :global(.noi) { position: relative; z-index: 3; margin-bottom: -4px; }

@@ -1,16 +1,21 @@
 ---
-import { noiSvg, type NoiPose } from '../brand/noi-art';
+import { noiParts, noiSvg, type NoiPose } from '../brand/noi-art';
 
 interface Props { pose?: NoiPose; size?: number; class?: string; still?: boolean; title?: string; }
 const { pose = 'feliz', size = 240, class: cls = '', still = false, title } = Astro.props;
 
 // ids únicos por instancia: varios SVG en la misma página no deben compartir degradados
 const uid = Math.random().toString(36).slice(2, 8);
-let svg = noiSvg(pose, { size, title }).replace(/noi-(skin2|skin|ear|iris|hat|shirt|shorts|pack|pkm)\b/g, `noi-$1-${uid}`);
+let svg = noiSvg(pose, { size, title });
+const parts = noiParts(pose);
 
 // Envolvemos las capas animables en grupos propios para no pisar el transform de cada pose.
 const wrap = (name: string, anim: string) => {
-  svg = svg.replace(new RegExp(`(<g class="noi-${name}"[^>]*>.*?</g>)`), `<g class="a-${anim}">$1</g>`);
+  // Cada capa puede contener otros <g>: una regex hasta el primer </g> cortaba los ojos o los brazos.
+  const part = parts.find((p) => p.id.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`) === name);
+  if (!part) return;
+  const layer = `<g class="noi-${name}"${part.transform ? ` transform="${part.transform}"` : ''}>${part.markup}</g>`;
+  svg = svg.replace(layer, `<g class="a-${anim}">${layer}</g>`);
 };
 wrap('ear-l', 'ear-l');
 wrap('ear-r', 'ear-r');
@@ -21,6 +26,10 @@ wrap('arm-l', pose === 'hola' ? 'wave' : pose === 'celebra' ? 'cheer-l' : 'still
 wrap('arm-r', pose === 'celebra' ? 'cheer-r' : 'still');
 wrap('extras', 'float');
 svg = svg.replace(/(<g class="noi-shadow")/, '<g class="a-breathe">$1').replace('</svg>', '</g></svg>');
+// Renombrar solo ids y sus referencias: «noi-ear» también es prefijo de clases como «noi-ear-l».
+svg = svg
+  .replace(/\bid="(noi-(?:skin2|skin|ear|iris|hat|shirt|shorts|pack|pkm))"/g, `id="$1-${uid}"`)
+  .replace(/url\(#(noi-(?:skin2|skin|ear|iris|hat|shirt|shorts|pack|pkm))\)/g, `url(#$1-${uid})`);
 ---
 <span class:list={['noi', { 'noi-still': still }, cls]} style={`--noi-size:${size}px`} set:html={svg} />
 

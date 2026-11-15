@@ -9,6 +9,8 @@ npm run build           # estático en dist/
 npm run check           # comprueba tipos y plantillas
 ```
 
+El dominio público es `https://sanuk.overlayon.com`. Se usa para canonical, Open Graph, `robots.txt` y `sitemap.xml`; `SITE_URL` permite sobreescribirlo en el hosting. La página 404 lleva `noindex` y queda fuera del sitemap.
+
 ## La marca viene de la app
 
 El dibujo de Noi y los tokens del design system tienen una sola fuente: `src/brand` del repo de la app. Antes de cada `dev` y `build`, `scripts/sync-brand.mjs` los copia a `src/brand` si el repo de la app está al lado, en `../app` (la carpeta del proyecto tiene `app/` y `site/` juntas). Si no está, por ejemplo en un servidor que solo clona este repo, usa las copias de `src/brand`, que también están en el repo.

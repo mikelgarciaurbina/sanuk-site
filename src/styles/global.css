@@ -5,7 +5,7 @@
 @import './tokens.css';
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 76px; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 88px; }
 body {
   margin: 0; background: var(--niebla); color: var(--tinta);
   font-family: var(--f-ui); font-weight: 600; font-size: 1.0625rem; line-height: 1.6;
@@ -23,7 +23,11 @@ a:hover { color: var(--mohom); }
 .th { line-height: 1.5; }
 .rom { font-style: italic; color: var(--tinta-2); }
 code, .mono { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: .9em; }
-:focus-visible { outline: 3px solid var(--cielo); outline-offset: 3px; border-radius: 6px; }
+:focus-visible { outline: 3px solid var(--cielo-hondo); outline-offset: 3px; border-radius: 6px; }
+main, .grid > *, .wrap > * { min-width: 0; }
+main { overflow-wrap: anywhere; }
+button, input { font: inherit; }
+[id] { scroll-margin-top: 12px; }
 
 .wrap { width: min(1120px, 100% - 32px); margin-inline: auto; }
 .narrow { width: min(720px, 100% - 32px); margin-inline: auto; }
@@ -62,8 +66,15 @@ a.card:hover, .card.lift:hover { transform: translateY(-4px) rotate(-.4deg); box
 
 .grid { display: grid; gap: 20px; }
 @media (min-width: 640px) { .g2 { grid-template-columns: repeat(2, 1fr); } .g3 { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 960px) { .g3 { grid-template-columns: repeat(3, 1fr); } .g4 { grid-template-columns: repeat(4, 1fr); } }
 @media (min-width: 640px) { .g4 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 960px) { .g3 { grid-template-columns: repeat(3, 1fr); } .g4 { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 600px) { html { scroll-padding-top: 132px; } }
+
+html[data-motion='paused'] { scroll-behavior: auto; }
+html[data-motion='paused'] *, html[data-motion='paused'] *::before, html[data-motion='paused'] *::after {
+  animation-play-state: paused !important;
+  transition-duration: 0.01ms !important;
+}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

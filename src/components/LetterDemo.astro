@@ -5,7 +5,6 @@ let k = 0;
 const lines = letter.map((l) => ({ es: l.es, toks: l.toks.map((t) => ({ ...t, i: k++ })) }));
 ---
 <div class="ld" id="carta-demo" data-total={total}>
-  <script is:inline>document.currentScript.parentElement.setAttribute('data-js', '');</script>
   <div class="ld-ctrl">
     <button type="button" class="btn" data-learn>Aprender una palabra</button>
     <button type="button" class="btn btn-ghost btn-sm" data-reset>Empezar de nuevo</button>
@@ -13,7 +12,7 @@ const lines = letter.map((l) => ({ es: l.es, toks: l.toks.map((t) => ({ ...t, i:
       <span>Palabras aprendidas: <b data-n>0</b> de {total}</span>
       <input type="range" min="0" max={total} value="0" step="1" data-range aria-label="Palabras aprendidas" />
     </label>
-    <p class="ld-pct" role="status" aria-live="polite">Entiendes el <b data-pct>0</b> %</p>
+    <p class="ld-pct"><span aria-hidden="true">Entiendes el <b data-pct>0</b> %</span><span class="sr-only" role="status" aria-atomic="true" data-announcement>Entiendes el 0 %</span></p>
   </div>
 
   <article class="paper" lang="th" aria-label="La carta de Yai, en thai">
@@ -82,14 +81,16 @@ const lines = letter.map((l) => ({ es: l.es, toks: l.toks.map((t) => ({ ...t, i:
     const pctEl = root.querySelector<HTMLElement>('[data-pct]')!;
     const learn = root.querySelector<HTMLButtonElement>('[data-learn]')!;
     const reset = root.querySelector<HTMLButtonElement>('[data-reset]')!;
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const motion = matchMedia('(prefers-reduced-motion: reduce)');
+    const reduce = () => motion.matches || document.documentElement.dataset.motion === 'paused';
+    const announcement = root.querySelector<HTMLElement>('[data-announcement]')!;
     let n = 0;
     let shown = 0;
     let raf = 0;
 
     const countTo = (target: number) => {
       cancelAnimationFrame(raf);
-      if (reduce) { shown = target; pctEl.textContent = String(target); return; }
+      if (reduce()) { shown = target; pctEl.textContent = String(target); return; }
       const from = shown, t0 = performance.now(), dur = 420;
       const step = (t: number) => {
         const p = Math.min(1, (t - t0) / dur);
@@ -106,22 +107,30 @@ const lines = letter.map((l) => ({ es: l.es, toks: l.toks.map((t) => ({ ...t, i:
       words.forEach((w, i) => {
         const on = i < n;
         w.classList.toggle('on', on);
+        w.setAttribute('aria-hidden', String(!on));
         w.classList.remove('pop');
-        if (on && i >= prev && !reduce) { void w.offsetWidth; w.classList.add('pop'); }
+        if (on && i >= prev && !reduce()) { void w.offsetWidth; w.classList.add('pop'); }
       });
-      lines.forEach((l) => l.classList.toggle('done', Array.from(l.querySelectorAll('.w')).every((w) => w.classList.contains('on'))));
+      lines.forEach((l) => {
+        const done = Array.from(l.querySelectorAll('.w')).every((w) => w.classList.contains('on'));
+        l.classList.toggle('done', done);
+        l.querySelector('.es')?.setAttribute('aria-hidden', String(!done));
+      });
       range.value = String(n);
       nEl.textContent = String(n);
       range.setAttribute('aria-valuetext', `${n} de ${total} palabras`);
       learn.disabled = n >= total;
       learn.setAttribute('aria-disabled', String(n >= total));
       root.classList.toggle('complete', n >= total);
-      countTo(Math.round((n / total) * 100));
+      const percent = Math.round((n / total) * 100);
+      announcement.textContent = `Entiendes el ${percent} %. ${n} de ${total} palabras aprendidas.`;
+      countTo(percent);
     };
 
     learn.addEventListener('click', () => set(n + 1));
     reset.addEventListener('click', () => set(0));
     range.addEventListener('input', () => set(Number(range.value)));
+    root.setAttribute('data-js', '');
     set(0);
   }
 </script>
