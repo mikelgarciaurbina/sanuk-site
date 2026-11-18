@@ -91,17 +91,16 @@ const nav = ['color', 'tonos', 'tipografia', 'componentes', 'movimiento', 'sonid
 const navL = ['Color', 'Tonos', 'Tipografía', 'Componentes', 'Movimiento', 'Sonido', 'Háptica', 'Noi', 'Voz'];
 const layers = noiParts('feliz').map((p) => p.id);
 ---
-<Layout title="Sistema de diseño · Sanuk" description="Por qué cada color, tono, tipografía, componente, movimiento y sonido de Sanuk sale del viaje de Chiang Mai a Mae Hong Son.">
+<Layout title="Sistema de diseño · Sanuk" description="Explora el sistema de diseño de Sanuk. Descubre cómo representamos los cinco tonos del tailandés con trazos y colores, diseñamos a Noi y damos sonido a cada acierto.">
   <section class="intro">
     <div class="wrap intro-in">
       <div>
-        <p class="eyebrow">Sistema de diseño</p>
-        <h1>Todo sale del camino</h1>
-        <p class="lead">Ningún color, sonido ni movimiento de Sanuk está elegido al azar: cada uno viene de algo que verías, oirías o tocarías entre Chiang Mai y Mae Hong Son. Aquí está el porqué.</p>
+        <h1>El sistema de diseño de Sanuk</h1>
+        <p class="lead">El verde de los arrozales marca un acierto y el sonido de la madera acompaña tus respuestas. Así se convierte el viaje de Chiang Mai a Mae Hong Son en una app para aprender tailandés.</p>
       </div>
       <Noi pose="piensa" size={200} />
     </div>
-    <nav class="wrap toc" aria-label="Secciones">
+    <nav class="wrap toc" aria-label="Secciones del sistema de diseño">
       {nav.map((id, i) => <a class="btn btn-ghost btn-sm" href={`#${id}`}>{navL[i]}</a>)}
     </nav>
   </section>
@@ -139,12 +138,12 @@ const layers = noiParts('feliz').map((p) => p.id);
   <section class="section alt" id="tonos">
     <div class="wrap">
       <p class="eyebrow">02 · Los 5 tonos</p>
-      <h2>Cinco tonos, cinco colores</h2>
-      <p class="lead">En thai, el mismo sonido cambia de significado según el tono. Por eso cada tono tiene su propio color y su propio trazo: el oído se apoya en el ojo.</p>
+      <h2>Los cinco tonos del tailandés</h2>
+      <p class="lead">En tailandés, una misma sílaba cambia de significado según el tono. Por eso cada tono tiene su propio color y su propio trazo: el oído se apoya en el ojo.</p>
       <p>Cada uno combina tres pistas: el <strong>contorno</strong> dibuja cómo sube o baja la voz, el <strong>color</strong> lo distingue de un vistazo y la <strong>palabra de ejemplo</strong> lo ancla a algo real.</p>
-      <div class="table-wrap" role="region" aria-label="Tabla de los cinco tonos; desplázate para ver todas las columnas" tabindex="0">
+      <div class="table-wrap" role="region" aria-label="Ejemplos de los cinco tonos del tailandés" tabindex="0">
         <table class="tones">
-          <caption class="sr-only">Los cinco tonos del thai con su color, contorno y palabra de ejemplo</caption>
+          <caption class="sr-only">Los cinco tonos del tailandés con su color, contorno y palabra de ejemplo</caption>
           <thead><tr><th scope="col">Tono</th><th scope="col">Contorno</th><th scope="col">Color</th><th scope="col">Ejemplo</th></tr></thead>
           <tbody>
             {toneRows.map((r) => {
@@ -152,7 +151,7 @@ const layers = noiParts('feliz').map((p) => p.id);
               return (
                 <tr>
                   <th scope="row">{t.name} <span class="th" lang="th">{t.thai}</span></th>
-                  <td><svg viewBox="0 0 24 14" width="72" height="42" aria-hidden="true"><path d={t.path} fill="none" stroke={t.fill} stroke-width="2.6" stroke-linecap="round" /></svg></td>
+                  <td><span class="sr-only">{r.contour}</span><svg viewBox="0 0 24 14" width="72" height="42" aria-hidden="true"><path d={t.path} fill="none" stroke={t.text} stroke-width="2.6" stroke-linecap="round" /></svg></td>
                   <td><span class="tchip" style={`background:${t.fill};color:${t.on}`}><b class="mono">{t.fill}</b></span></td>
                   <td><span class="th ex" lang="th" style={`color:${t.text}`}>{r.word}</span> <span class="rom">{r.rom}</span> · «{r.es}»</td>
                 </tr>
@@ -169,15 +168,15 @@ const layers = noiParts('feliz').map((p) => p.id);
   <section class="section" id="tipografia">
     <div class="wrap">
       <p class="eyebrow">03 · Tipografía</p>
-      <h2>Tres voces</h2>
+      <h2>Tipografías para leer español y tailandés</h2>
       <div class="grid g3 type">
         <article class="card"><p class="eyebrow">Fredoka · 600–700</p><p class="big disp">Thai, curva a curva</p><p>Redondeada y con peso: es la voz de Noi. Titulares, números y momentos de alegría.</p></article>
         <article class="card"><p class="eyebrow">Nunito · 600–900</p><p class="big ui">Aprende una palabra nueva</p><p>Amable y muy legible en tamaños pequeños. Botones, etiquetas y texto corrido.</p></article>
-        <article class="card"><p class="eyebrow">Noto Sans Thai Looped</p><p class="big th" lang="th">สวัสดี ขอบคุณ</p><p>Todo el texto thai. Los bucles son deliberados (ver abajo).</p></article>
+        <article class="card"><p class="eyebrow">Noto Sans Thai Looped</p><p class="big th" lang="th">สวัสดี ขอบคุณ</p><p>Los bucles ayudan a reconocer las letras tailandesas.</p></article>
       </div>
       <div class="why card">
-        <h3>¿Por qué el thai con «lazos»?</h3>
-        <p>Muchas letras thai se escriben empezando por un bucle: ก, ข, ค, ท. Las fuentes modernas «sin lazos» (como las de las señales de tráfico) los eliminan y parecen más limpias, pero no son lo que se enseña en los colegios tailandeses. Para quien empieza, el bucle es la pista de por dónde empezar el trazo y ayuda a distinguir letras casi iguales como ถ y ภ.</p>
+        <h3>¿Por qué usamos letras tailandesas con bucles?</h3>
+        <p>Al escribir a mano, el bucle de letras como <span lang="th">ข</span> y <span lang="th">ค</span> indica dónde empieza el trazo. Mantener ese detalle en la pantalla también ayuda a distinguir letras parecidas como <span lang="th">ถ</span> y <span lang="th">ภ</span>.</p>
         <p class="th cmp" lang="th"><span>ก ข ค ท พ ผ ม</span></p>
         <p class="small">Mostramos el thai siempre con los lazos, aunque la interfaz sea moderna.</p>
       </div>
@@ -188,12 +187,12 @@ const layers = noiParts('feliz').map((p) => p.id);
   <section class="section alt" id="componentes">
     <div class="wrap">
       <p class="eyebrow">04 · Componentes</p>
-      <h2>Piezas con peso</h2>
+      <h2>Botones, fichas y recompensas</h2>
       <p class="lead">Todo es redondeado, grueso y táctil. Lo que se toca tiene una sombra inferior de 5 px que se aplasta al pulsar.</p>
 
       <h3>Botones con profundidad</h3>
-      <p>Pulsa y mantén: el botón baja 4 px y la sombra se colapsa, como una ficha de madera.</p>
-      <div class="demo row">
+      <p>Prueba el efecto de pulsación en estos botones de muestra. Al mantener pulsado uno, baja la ficha y se acorta su sombra.</p>
+      <div class="demo row" data-button-samples>
         <button class="btn" type="button">Continuar</button>
         <button class="btn btn-ok" type="button">Comprobar</button>
         <button class="btn btn-ghost" type="button">Ahora no</button>
@@ -201,15 +200,17 @@ const layers = noiParts('feliz').map((p) => p.id);
         <button class="btn" type="button" disabled>Desactivado</button>
       </div>
 
+      <p class="sample-result" role="status" data-sample-result></p>
+
       <h3>Fichas de juego</h3>
       <p>Una ficha dice siempre lo mismo en cinco estados. El color nunca va solo: el estado también cambia de borde y de símbolo.</p>
       <div class="demo tiles">
         {[['normal', 'Normal', 'เสือ', 'tigre', ''], ['sel', 'Seleccionada', 'เสือ', 'tigre', 'Elegida'], ['ok', 'Correcta', 'เสือ', 'tigre', 'Correcta'], ['bad', 'Equivocada', 'เสื้อ', 'camisa', 'Casi'], ['done', 'Hecha', 'เสือ', 'tigre', 'Hecha']].map(([c, l, th, es, tag]) => (
           <div class="tile-w">
-            <button type="button" class={`tile t-${c}`}>
+            <div class={`tile t-${c}`}>
               <span class="th" lang="th">{th}</span><span class="tes">{es}</span>
               {tag && <span class="ttag">{tag}</span>}
-            </button>
+            </div>
             <small>{l}</small>
           </div>
         ))}
@@ -242,8 +243,8 @@ const layers = noiParts('feliz').map((p) => p.id);
       <h3>Hojas de respuesta</h3>
       <p>La hoja sube desde abajo tras cada respuesta. Nunca reprocha: indica la respuesta y sigue.</p>
       <div class="grid g2 sheets">
-        <div class="sheet s-ok"><b>¡Muy bien!</b><span><span class="th" lang="th">ข้าว</span> <span class="rom">khâaw</span> · arroz</span><button class="btn btn-ok btn-sm" type="button">Continuar</button></div>
-        <div class="sheet s-bad"><b>Casi.</b><span>Se dice <span class="th" lang="th">ข้าว</span> <span class="rom">khâaw</span>. <span class="th" lang="th">ไม่เป็นไร</span>, no pasa nada.</span><button class="btn btn-sm" type="button" style="--bg:var(--laca);--deep:var(--laca-hondo);--fg:#fff">Entendido</button></div>
+        <div class="sheet s-ok"><b>¡Muy bien!</b><span><span class="th" lang="th">ข้าว</span> <span class="rom">khâaw</span> · arroz</span><span class="btn btn-ok btn-sm example">Continuar</span></div>
+        <div class="sheet s-bad"><b>Casi.</b><span>Se dice <span class="th" lang="th">ข้าว</span> <span class="rom">khâaw</span>. <span class="th" lang="th">ไม่เป็นไร</span>, no pasa nada.</span><span class="btn btn-sm example" style="--bg:var(--laca-hondo);--deep:var(--tinta);--fg:#fff">Entendido</span></div>
       </div>
     </div>
   </section>
@@ -252,7 +253,7 @@ const layers = noiParts('feliz').map((p) => p.id);
   <section class="section" id="movimiento">
     <div class="wrap">
       <p class="eyebrow">05 · Movimiento</p>
-      <h2>Peso y alegría</h2>
+      <h2>Cómo se mueven Noi y las fichas</h2>
       <p class="lead">Noi pesa 1.200 kilos y es feliz. Todo se mueve como algo grande y contento: arranca con peso, llega con un pequeño rebote y se detiene sin prisa.</p>
       <div class="grid g3">
         {springs.map((s) => (
@@ -261,7 +262,7 @@ const layers = noiParts('feliz').map((p) => p.id);
             <p class="mono">rigidez {s.p.stiffness} · amortig. {s.p.damping}</p>
             <div class="track"><span class="ball" style={`--ease:${s.css};--t:${s.ms}ms`}></span></div>
             <p>{s.use}</p>
-            <button class="btn btn-ghost btn-sm" type="button" data-play>Probar</button>
+            <button class="btn btn-ghost btn-sm" type="button" data-play hidden>Probar {s.name}</button>
           </article>
         ))}
       </div>
@@ -273,7 +274,7 @@ const layers = noiParts('feliz').map((p) => p.id);
       </ul>
       <div class="grid g2 sp">
         <article class="card"><h3>La niebla: {motion.nieblaMs / 1000} s</h3><p>La niebla deriva de lado a lado en {motion.nieblaMs / 1000} segundos. Es tan lenta que casi no se nota, como en la montaña.</p><div class="mist-demo" aria-hidden="true"><i></i><i></i></div></article>
-        <article class="card"><h3>Movimiento reducido</h3><p>Si el sistema pide menos movimiento, desaparecen la niebla, los parpadeos, las orejas y los rebotes. Se conservan los cambios de estado, sin animar.</p></article>
+        <article class="card"><h3>Movimiento reducido</h3><p>Si el sistema pide menos movimiento, la niebla y las orejas de Noi se quedan quietas. Los cambios de estado son inmediatos. También puedes desactivar las animaciones en la cabecera.</p></article>
       </div>
     </div>
   </section>
@@ -282,15 +283,16 @@ const layers = noiParts('feliz').map((p) => p.id);
   <section class="section alt" id="sonido">
     <div class="wrap">
       <p class="eyebrow">06 · Sonido</p>
-      <h2>Suena a ranat</h2>
+      <h2>Los sonidos de Sanuk</h2>
       <p class="lead">El ranat es el xilófono de madera de la música tradicional thai. Usamos su escala pentatónica: suene lo que suene, siempre queda bien.</p>
       <div class="grid g2 snd">
-        <article class="card"><h3>Acierto</h3><p>Dos notas que suben, como una pregunta con respuesta.</p><button class="btn btn-sm" type="button" data-snd="ok">Escuchar</button></article>
-        <article class="card"><h3>Error</h3><p>Un «tok» suave de madera. Sin zumbido ni buzzer: solo «inténtalo otra vez».</p><button class="btn btn-sm" type="button" data-snd="bad">Escuchar</button></article>
-        <article class="card"><h3>Racha</h3><p>La campana de un templo, larga y cálida, cuando el farolillo sigue encendido.</p><button class="btn btn-sm" type="button" data-snd="streak">Escuchar</button></article>
-        <article class="card"><h3>Fin de capítulo</h3><p>Un gong grave que cierra el tramo: llegaste a otra parada.</p><button class="btn btn-sm" type="button" data-snd="gong">Escuchar</button></article>
+        <article class="card"><h3>Acierto</h3><p>Dos notas que suben, como una pregunta con respuesta.</p><button class="btn btn-sm" type="button" data-snd="ok" hidden>Escuchar el acierto</button></article>
+        <article class="card"><h3>Error</h3><p>Un «tok» suave de madera. Sin zumbido ni buzzer: solo «inténtalo otra vez».</p><button class="btn btn-sm" type="button" data-snd="bad" hidden>Escuchar el error</button></article>
+        <article class="card"><h3>Racha</h3><p>La campana de un templo, larga y cálida, cuando el farolillo sigue encendido.</p><button class="btn btn-sm" type="button" data-snd="streak" hidden>Escuchar la racha</button></article>
+        <article class="card"><h3>Fin de capítulo</h3><p>Un gong grave que cierra el tramo: llegaste a otra parada.</p><button class="btn btn-sm" type="button" data-snd="gong" hidden>Escuchar el gong</button></article>
       </div>
-      <p class="note">Las demos se sintetizan en tu navegador y solo suenan cuando pulsas. Los sonidos reales de la app son archivos propios.</p>
+      <p role="status" data-audio-status></p>
+      <p class="note">Al pulsar, tu navegador reproduce una muestra del sonido. La app utiliza sus propios archivos de audio.</p>
     </div>
   </section>
 
@@ -298,9 +300,9 @@ const layers = noiParts('feliz').map((p) => p.id);
   <section class="section" id="haptica">
     <div class="wrap">
       <p class="eyebrow">07 · Háptica</p>
-      <h2>Se siente antes de verse</h2>
+      <h2>Qué indica cada vibración</h2>
       <p class="lead">La vibración repite lo que dicen el sonido y el movimiento, nunca lo sustituye. Siempre se puede desactivar.</p>
-      <div class="table-wrap"><table class="plain">
+      <div class="table-wrap"><table class="plain"><caption class="sr-only">Vibraciones de la app según la acción</caption>
         <thead><tr><th scope="col">Momento</th><th scope="col">Sensación</th></tr></thead>
         <tbody>
           <tr><th scope="row">Pulsar un botón</th><td>Toque ligero, como una ficha sobre la mesa.</td></tr>
@@ -324,7 +326,7 @@ const layers = noiParts('feliz').map((p) => p.id);
           <li><b>Cabeza grande y ojos enormes.</b> Tres brillos en cada ojo y pestañas largas: se le nota todo lo que siente.</li>
           <li><b>Orejas grandes con pecas rosas.</b> Las pecas son un rasgo real de las elefantas asiáticas mayores.</li>
           <li><b>Sin colmillos.</b> Como la mayoría de las elefantas asiáticas.</li>
-          <li><b>Sombrero de exploradora con frangipani.</b> La flor blanca de los templos (ลีลาวดี) prendida en la cinta.</li>
+          <li><b>Sombrero de exploradora con frangipani.</b> La flor blanca de los templos (<span lang="th">ลีลาวดี</span>) prendida en la cinta.</li>
           <li><b>Pañuelo pha khao ma.</b> La tela de cuadros que se lleva en todo el país, anudada al cuello.</li>
           <li><b>Mochila índigo de rayas Lanna.</b> Llena de plátanos, por si el camino se alarga.</li>
         </ol>
@@ -348,7 +350,7 @@ const layers = noiParts('feliz').map((p) => p.id);
         <article class="card"><h3>Celebramos lo pequeño</h3><p>Una palabra aprendida ya es una curva menos. Noi lo dice así: <span class="th" lang="th">เก่งมาก!</span> «¡qué crack!»</p></article>
         <article class="card"><h3>Los fallos no se castigan</h3><p>Nada de «incorrecto» ni «fallaste». Se dice la respuesta y se sigue: <span class="th" lang="th">ไม่เป็นไร</span>.</p></article>
       </div>
-      <div class="table-wrap sp"><table class="plain vt">
+      <div class="table-wrap sp"><table class="plain vt"><caption class="sr-only">Ejemplos de mensajes de Sanuk</caption>
         <thead><tr><th scope="col">Evitamos</th><th scope="col">Decimos</th></tr></thead>
         <tbody>
           <tr><td class="no">Respuesta incorrecta.</td><td class="yes">Casi. Se dice <span class="th" lang="th">ข้าว</span>.</td></tr>
@@ -380,6 +382,8 @@ const layers = noiParts('feliz').map((p) => p.id);
   .sw p { margin: 8px 4px 0; font-size: .95rem; color: var(--tinta-2); }
   .table-wrap { overflow-x: auto; margin: 24px 0 12px; border-radius: var(--r-l); }
   table { border-collapse: collapse; width: 100%; background: var(--blanco); min-width: 520px; }
+  table.plain { min-width: 0; }
+  @media (max-width: 30em) { .plain th, .plain td { padding: .6rem; } }
   .alt table { background: var(--niebla); }
   th, td { text-align: left; padding: 14px 16px; border-bottom: 2px solid var(--niebla-3); vertical-align: middle; }
   thead th { font-weight: 900; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--tinta-2); }
@@ -396,9 +400,9 @@ const layers = noiParts('feliz').map((p) => p.id);
   h3 + p { margin-top: 0; }
   .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 18px; }
   .tile-w { display: grid; gap: 8px; justify-items: center; text-align: center; }
-  .tile { all: unset; box-sizing: border-box; width: 100%; cursor: pointer; display: grid; justify-items: center; gap: 2px; padding: 16px 8px; border-radius: var(--r-l); background: var(--blanco); border: 2px solid var(--niebla-3); box-shadow: 0 4px 0 var(--niebla-4); position: relative; transition: transform var(--dur-tap), box-shadow var(--dur-tap); }
-  .tile:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--niebla-4); }
-  .tile:focus-visible { outline: 3px solid var(--cielo); outline-offset: 3px; }
+  .tile { all: unset; box-sizing: border-box; width: 100%; display: grid; justify-items: center; gap: 2px; padding: 16px 8px; border-radius: var(--r-l); background: var(--blanco); border: 2px solid var(--niebla-3); box-shadow: 0 4px 0 var(--niebla-4); position: relative; }
+  .example { cursor: default; pointer-events: none; }
+  .sample-result { min-height: 1.6em; }
   .tile .th { font-size: 2rem; font-weight: 700; }
   .tile .tes { font-weight: 800; color: var(--tinta-2); }
   .ttag { font-size: .72rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; margin-top: 4px; padding: 2px 10px; border-radius: var(--r-pill); }
@@ -446,12 +450,20 @@ const layers = noiParts('feliz').map((p) => p.id);
   .poses li span { color: var(--tinta-2); }
   .poses :global(.noi) { max-width: 130px; width: 100%; }
   .vt .no { color: var(--laca-hondo); } .vt .yes { color: var(--arrozal-hondo); font-weight: 800; }
-  .vt .no::before { content: 'No: '; font-weight: 900; } .vt .yes::before { content: 'Sí: '; font-weight: 900; }
+
 </style>
 
 <script>
+  const sampleResult = document.querySelector('[data-sample-result]')!;
+  document.querySelectorAll('[data-button-samples] button').forEach((button) => {
+    button.addEventListener('click', () => {
+      sampleResult.textContent = `Has probado el botón «${button.textContent}».`;
+    });
+  });
+
   // Muelles: calculamos la distancia disponible y alternamos la posición.
   document.querySelectorAll<HTMLElement>('[data-play]').forEach((btn) => {
+    btn.hidden = false;
     btn.addEventListener('click', () => {
       const ball = btn.closest('.spring')!.querySelector<HTMLElement>('.ball')!;
       const track = ball.parentElement!;
@@ -475,13 +487,23 @@ const layers = noiParts('feliz').map((p) => p.id);
       o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + dur + 0.1);
     }
   }
-  function play(kind: string) {
+  async function play(kind: string) {
     ctx ??= new AudioContext();
+    if (ctx.state === 'suspended') await ctx.resume();
     const t = ctx.currentTime + 0.02;
     if (kind === 'ok') { tone(f(0), t, 0.35, 'triangle', 0.22, 2); tone(f(2), t + 0.13, 0.55, 'triangle', 0.22, 2); }
     if (kind === 'bad') { tone(190, t, 0.12, 'sine', 0.3); tone(380, t, 0.06, 'triangle', 0.1); }
     if (kind === 'streak') { tone(f(3, 392), t, 2.2, 'sine', 0.2, 4); }
     if (kind === 'gong') { tone(f(0, 98), t, 3, 'sine', 0.3, 4); }
   }
-  document.querySelectorAll<HTMLElement>('[data-snd]').forEach((b) => b.addEventListener('click', () => play(b.dataset.snd!)));
+  if ('AudioContext' in window) {
+    document.querySelectorAll<HTMLButtonElement>('[data-snd]').forEach((button) => {
+      button.hidden = false;
+      button.addEventListener('click', () => {
+        play(button.dataset.snd!).catch(() => {
+          document.querySelector('[data-audio-status]')!.textContent = 'El navegador no ha podido reproducir la muestra.';
+        });
+      });
+    });
+  }
 </script>

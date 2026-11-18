@@ -2,21 +2,39 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { storeUrls } from '../data/content';
 
 interface Props { title: string; description: string; path?: string; noindex?: boolean; }
 const { title, description, path = Astro.url.pathname, noindex = false } = Astro.props;
 const canonical = Astro.site ? new URL(path === '/' ? '/' : `${path.replace(/\/$/, '')}/`, Astro.site).href : undefined;
 const image = new URL('/img/social-card.png', Astro.site ?? Astro.url).href;
-const schema = {
+const imageAlt = 'Sanuk. Thai, curva a curva. Aprende tailandés desde el español.';
+const home = Astro.site?.href;
+const schema = home && path === '/' ? {
   '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'Sanuk',
-  applicationCategory: 'EducationalApplication',
-  operatingSystem: 'iOS, Android',
-  inLanguage: 'es',
-  description: 'Aprende tailandés desde el español con una historia, lecciones cortas y veinte juegos.',
-  ...(Astro.site ? { url: Astro.site.href } : {}),
-};
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      name: 'Sanuk',
+      url: home,
+      inLanguage: 'es',
+      about: { '@id': new URL('#app', home).href },
+    },
+    {
+      '@type': 'MobileApplication',
+      '@id': new URL('#app', home).href,
+      name: 'Sanuk',
+      url: home,
+      applicationCategory: 'EducationalApplication',
+      operatingSystem: 'iOS, Android',
+      inLanguage: 'es',
+      description,
+      isAccessibleForFree: true,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+      installUrl: Object.values(storeUrls),
+    },
+  ],
+} : undefined;
 ---
 <!doctype html>
 <html lang="es">
@@ -34,16 +52,17 @@ const schema = {
     <meta property="og:site_name" content="Sanuk" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    {canonical && <meta property="og:url" content={canonical} />}
+    {canonical && !noindex && <meta property="og:url" content={canonical} />}
     <meta property="og:image" content={image} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Sanuk. Thai, curva a curva. Aprende tailandés desde el español." />
+    <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={image} />
+    <meta name="twitter:image:alt" content={imageAlt} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    {path === '/' && <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />}
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />}
   </head>
   <body>
     <a class="skip" href="#main">Saltar al contenido</a>

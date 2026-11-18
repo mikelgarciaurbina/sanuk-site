@@ -59,28 +59,28 @@ export const moons = [
 ] as const;
 
 export type Game = { n: number; name: string; line: string; trains: string; thai?: string };
-export const gameGroups: { id: string; name: string; blurb: string; trains: string; games: Game[] }[] = [
+export const gameGroups: { id: string; name: string; blurb: string; games: Game[] }[] = [
   {
-    id: 'palabras', name: 'Palabras', blurb: 'Vocabulario que se pega.', trains: 'vocabulario',
+    id: 'palabras', name: 'Palabras', blurb: 'Relaciona cada palabra con su significado y repásala con cartas, dibujos y farolillos.',
     games: [
-      { n: 1, name: 'Parejas', line: 'Une thai y español antes de que se consuma la mecha.', trains: 'Vocabulario y reflejos' },
-      { n: 2, name: 'Memoria del templo', line: 'Voltea cartas Lanna y encuentra cada pareja.', trains: 'Memoria visual' },
+      { n: 1, name: 'Parejas', line: 'Empareja cada palabra en tailandés con su traducción antes de que se apague la mecha.', trains: 'Vocabulario y reflejos' },
+      { n: 2, name: 'Memoria del templo', line: 'Da la vuelta a las cartas Lanna y encuentra cada pareja.', trains: 'Memoria visual' },
       { n: 3, name: 'Monzón', line: 'Toca la gota correcta antes de que caiga al arrozal.', trains: 'Reconocimiento rápido' },
       { n: 4, name: '¿Sí o บ่?', line: 'Desliza: ¿la traducción es correcta? บ่ es «no» en el norte.', trains: 'Vocabulario y kham mueang', thai: 'บ่' },
       { n: 5, name: 'Noche de farolillos', line: 'Suelta los farolillos de una categoría.', trains: 'Categorías de palabras' },
     ],
   },
   {
-    id: 'oido', name: 'Oído y tonos', blurb: 'Para que te entiendan a la primera.', trains: 'oído',
+    id: 'oido', name: 'Oído y tonos', blurb: 'Escucha cómo cambia una palabra cuando cambia el tono. Después, prueba con tu propia voz.',
     games: [
-      { n: 6, name: 'Oído de elefante', line: 'Escucha y elige lo que has oído: primero con dibujos, luego solo en thai.', trains: 'Comprensión oral' },
+      { n: 6, name: 'Oído de elefante', line: 'Escucha una palabra y elige el dibujo que le corresponde. Más adelante, las opciones aparecen en tailandés.', trains: 'Comprensión oral' },
       { n: 7, name: 'Trompa de tonos', line: 'Escucha la melodía de cada sílaba y adivina su tono.', trains: 'Los 5 tonos' },
-      { n: 8, name: '¿Tigre o camisa?', line: 'Pares mínimos: เสือ sʉ̌a tigre / เสื้อ sʉ̂a camisa.', trains: 'Tonos y pares mínimos', thai: 'เสือ' },
+      { n: 8, name: '¿Tigre o camisa?', line: 'Distingue เสือ (sʉ̌a, «tigre») de เสื้อ (sʉ̂a, «camisa»). Escucha cómo cambia el tono.', trains: 'Tonos y pares mínimos', thai: 'เสือ' },
       { n: 9, name: 'Eco', line: 'Repite como Noi y mira si tu tono sube y baja como el suyo.', trains: 'Pronunciación y tonos' },
     ],
   },
   {
-    id: 'frases', name: 'Frases', blurb: 'De palabras sueltas a conversación.', trains: 'gramática',
+    id: 'frases', name: 'Frases', blurb: 'Ordena las palabras, completa frases y aprende a contar objetos con el clasificador que les corresponde.',
     games: [
       { n: 10, name: 'Puente de bambú', line: 'Ordena palabras: cada una es una tabla del puente.', trains: 'Orden de la frase' },
       { n: 11, name: 'La palabra perdida', line: 'Completa la frase, caza al intruso y enciende el farolillo.', trains: 'Gramática en contexto' },
@@ -89,15 +89,15 @@ export const gameGroups: { id: string; name: string; blurb: string; trains: stri
     ],
   },
   {
-    id: 'vida-real', name: 'Vida real', blurb: 'Lo que vas a hacer allí arriba.', trains: 'situaciones',
+    id: 'vida-real', name: 'Vida real', blurb: 'Practica el tailandés que usarías al pagar en un mercado, hablar con la familia o seguir una indicación.',
     games: [
-      { n: 14, name: 'Paga justo', line: 'Escucha el precio, paga con baht de verdad, regatea y dilo tú.', trains: 'Dinero y números' },
-      { n: 15, name: 'Cena familiar', line: 'Escucha a la familia y contéstale en thai: en la mesa, por teléfono o en el arrozal.', trains: 'Conversación y oído' },
-      { n: 16, name: '1.864 curvas', line: 'Juego firma: elige la señal antes de cada curva. Una de cada cuatro es de tono.', trains: 'Velocidad y tonos' },
+      { n: 14, name: 'Paga justo', line: 'Escucha el precio en baht, regatea y elige los billetes y las monedas para pagar el importe exacto.', trains: 'Dinero y números' },
+      { n: 15, name: 'Cena familiar', line: 'Escucha a la familia y responde en tailandés en la mesa, por teléfono o en el arrozal.', trains: 'Conversación y oído' },
+      { n: 16, name: '1.864 curvas', line: 'Elige la señal antes de que el vehículo llegue a la curva. Algunas señales te piden reconocer un tono.', trains: 'Velocidad y tonos' },
     ],
   },
   {
-    id: 'letras', name: 'Letras', blurb: 'El alfabeto, sin miedo.', trains: 'lectura y escritura',
+    id: 'letras', name: 'Letras', blurb: 'Reconoce las letras del alfabeto tailandés, practica su trazo y combina sílabas hasta leer un cuento.',
     games: [
       { n: 17, name: 'Cueva de las letras', line: 'Linterna en la cueva Tham Lod: busca cada letra por su nombre, su sonido o su clase.', trains: 'Consonantes y vocales' },
       { n: 18, name: 'Une los puntos', line: 'Traza cada letra empezando por el bucle; al final, de memoria.', trains: 'Trazo y escritura' },
@@ -110,17 +110,17 @@ export const featuredGames = [16, 8, 3, 10, 14, 15];
 export const allGames = gameGroups.flatMap((g) => g.games);
 
 export const toneRows = [
-  { id: 'M', word: 'มา', rom: 'maa', es: 'venir' },
-  { id: 'L', word: 'ไก่', rom: 'gài', es: 'pollo' },
-  { id: 'F', word: 'ข้าว', rom: 'khâaw', es: 'arroz' },
-  { id: 'H', word: 'ม้า', rom: 'máa', es: 'caballo' },
-  { id: 'R', word: 'หมา', rom: 'mǎa', es: 'perro' },
+  { id: 'M', contour: 'La voz se mantiene a la misma altura.', word: 'มา', rom: 'maa', es: 'venir' },
+  { id: 'L', contour: 'La voz baja ligeramente y termina grave.', word: 'ไก่', rom: 'gài', es: 'pollo' },
+  { id: 'F', contour: 'La voz empieza alta y cae.', word: 'ข้าว', rom: 'khâaw', es: 'arroz' },
+  { id: 'H', contour: 'La voz se mantiene alta y sube al final.', word: 'ม้า', rom: 'máa', es: 'caballo' },
+  { id: 'R', contour: 'La voz baja primero y después sube.', word: 'หมา', rom: 'mǎa', es: 'perro' },
 ] as const;
 export const toneDefs = tones;
 
 export const principles = [
   ['Sanuk primero', 'Si no es divertido, no funciona. Sanuk (สนุก) significa «divertido».'],
-  ['ไม่เป็นไร', 'Equivocarse no quita vidas. Noi nunca regaña: no pasa nada.'],
+  ['ไม่เป็นไร', '«No pasa nada». Si te equivocas, Noi te enseña la respuesta y puedes volver a intentarlo.'],
   ['Curva a curva', 'Sesiones de 3 a 5 minutos. Cabe en un trayecto de autobús.'],
   ['La niebla se despeja', 'El progreso se ve: cada palabra aclara un poco la carta.'],
   ['Con respeto', 'ครับ y ค่ะ, el wai y el registro: se aprende cómo decirlo, no solo qué.'],

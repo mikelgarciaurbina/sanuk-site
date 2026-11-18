@@ -5,12 +5,12 @@
 @import './tokens.css';
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 88px; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 1rem; }
 body {
   margin: 0; background: var(--niebla); color: var(--tinta);
   font-family: var(--f-ui); font-weight: 600; font-size: 1.0625rem; line-height: 1.6;
-  overflow-x: hidden;
 }
+[hidden] { display: none !important; }
 img, svg { max-width: 100%; }
 h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 700; line-height: 1.12; margin: 0 0 .5em; letter-spacing: -.01em; text-wrap: balance; }
 h1 { font-size: clamp(2.4rem, 8vw, 4.5rem); }
@@ -36,7 +36,8 @@ button, input { font: inherit; }
 .lead { font-size: clamp(1.1rem, 2.4vw, 1.3rem); color: var(--tinta-2); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .skip { position: absolute; left: 16px; top: -60px; background: var(--tinta); color: #fff; padding: 10px 16px; border-radius: var(--r-m); z-index: 100; }
-.skip:focus { top: 12px; }
+.skip:focus { position: fixed; top: 12px; color: white; }
+.ft :focus-visible, .close :focus-visible { outline-color: var(--buatong); }
 
 /* botones con profundidad */
 .btn {
@@ -59,7 +60,7 @@ button, input { font: inherit; }
   transition: transform var(--dur-base) var(--ease-pop), box-shadow var(--dur-base);
 }
 a.card, .card.lift { text-decoration: none; color: inherit; display: block; }
-a.card:hover, .card.lift:hover { transform: translateY(-4px) rotate(-.4deg); box-shadow: 0 8px 0 var(--niebla-3), 0 16px 28px rgb(29 35 71 / .14); }
+a.card:hover, a.card:focus-visible { transform: translateY(-4px) rotate(-.4deg); box-shadow: 0 8px 0 var(--niebla-3), 0 16px 28px rgb(29 35 71 / .14); }
 
 .chip { display: inline-flex; align-items: center; gap: 8px; background: var(--blanco); border-radius: var(--r-pill); padding: 6px 16px 6px 8px; font-weight: 900; box-shadow: 0 3px 0 var(--niebla-3); }
 .chip img { width: 28px; height: 28px; }
@@ -68,11 +69,11 @@ a.card:hover, .card.lift:hover { transform: translateY(-4px) rotate(-.4deg); box
 @media (min-width: 640px) { .g2 { grid-template-columns: repeat(2, 1fr); } .g3 { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 640px) { .g4 { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 960px) { .g3 { grid-template-columns: repeat(3, 1fr); } .g4 { grid-template-columns: repeat(4, 1fr); } }
-@media (max-width: 600px) { html { scroll-padding-top: 132px; } }
+@media (min-width: 52em) and (min-height: 32em) { html { scroll-padding-top: 5.5rem; } }
 
-html[data-motion='paused'] { scroll-behavior: auto; }
-html[data-motion='paused'] *, html[data-motion='paused'] *::before, html[data-motion='paused'] *::after {
-  animation-play-state: paused !important;
+html[data-motion='running'] { scroll-behavior: smooth; }
+html:not([data-motion='running']) *, html:not([data-motion='running']) *::before, html:not([data-motion='running']) *::after {
+  animation: none !important;
   transition-duration: 0.01ms !important;
 }
 
@@ -80,7 +81,7 @@ html[data-motion='paused'] *, html[data-motion='paused'] *::before, html[data-mo
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
 }
-.btn:disabled { opacity: .55; cursor: not-allowed; transform: translateY(2px); box-shadow: 0 2px 0 var(--deep); filter: none; }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: .55; cursor: not-allowed; transform: translateY(2px); box-shadow: 0 2px 0 var(--deep); filter: none; }
 .bubble { position: relative; background: var(--blanco); border-radius: var(--r-xl); padding: 14px 20px; box-shadow: 0 4px 0 var(--niebla-3); display: inline-block; max-width: 100%; }
 .bubble::after { content: ''; position: absolute; left: -10px; bottom: 22px; width: 22px; height: 22px; background: var(--blanco); transform: rotate(45deg); border-radius: 4px; box-shadow: -3px 3px 0 var(--niebla-3); z-index: -1; }
 .bubble .th { font-size: 1.35rem; font-weight: 700; }

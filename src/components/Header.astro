@@ -2,17 +2,20 @@
 const links = [
   ['/#historia', 'El viaje'],
   ['/#como-funciona', 'Cómo funciona'],
-  ['/juegos', 'Juegos'],
-  ['/design-system', 'Diseño'],
+  ['/juegos/', 'Juegos'],
+  ['/design-system/', 'Diseño'],
 ];
-const path = Astro.url.pathname.replace(/\/$/, '');
+const path = Astro.url.pathname.replace(/\/?$/, '/');
 ---
 <header class="hd">
   <div class="wrap hd-in">
-    <a class="brand" href="/" aria-label="Sanuk, inicio">
+    <a class="brand" href="/" aria-current={path === '/' ? 'page' : undefined}>
       <span class="th brand-th" lang="th">สนุก</span>
-      <span class="brand-en">Sanuk</span>
+      <span class="brand-en">Sanuk</span><span class="sr-only">, inicio</span>
     </a>
+    <label class="motion-toggle" hidden>
+      <input type="checkbox" data-motion-toggle checked /> Animaciones
+    </label>
     <nav aria-label="Principal">
       <ul>
         {links.map(([href, label]) => (
@@ -24,9 +27,14 @@ const path = Astro.url.pathname.replace(/\/$/, '');
 </header>
 
 <style>
-  .hd { position: sticky; top: 0; z-index: 50; background: rgb(243 246 250 / 0.92); backdrop-filter: blur(8px); border-bottom: 2px solid var(--niebla-3); }
+  .hd { position: relative; z-index: 50; background: rgb(243 246 250 / 0.92); backdrop-filter: blur(8px); border-bottom: 2px solid var(--niebla-3); }
+  @media (min-width: 52em) and (min-height: 32em) { .hd { position: sticky; top: 0; } }
   .hd-in { display: flex; align-items: center; justify-content: space-between; gap: 4px 12px; min-height: 60px; flex-wrap: wrap; padding: 6px 0; }
   .brand { display: inline-flex; align-items: baseline; gap: 8px; text-decoration: none; color: var(--tinta); }
+  .motion-toggle:not([hidden]) { display: inline-flex; align-items: center; gap: .4em; min-height: 44px; font-size: .9rem; font-weight: 800; cursor: pointer; }
+  .motion-toggle input { width: 1.15em; height: 1.15em; margin: 0; accent-color: var(--arrozal-hondo); }
+  @media (max-width: 44em) { .hd-in nav { flex-basis: 100%; } }
+  @media (min-width: 44.01em) { .motion-toggle { margin-right: auto; } }
   .brand-th { font-weight: 700; font-size: 1.4rem; color: var(--azafran-hondo); color: #a85d00; }
   .brand-en { font-family: var(--f-display); font-weight: 700; font-size: 1.5rem; }
   ul { list-style: none; display: flex; gap: 4px; margin: 0; padding: 0; flex-wrap: wrap; }

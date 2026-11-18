@@ -31,7 +31,7 @@ svg = svg
   .replace(/\bid="(noi-(?:skin2|skin|ear|iris|hat|shirt|shorts|pack|pkm))"/g, `id="$1-${uid}"`)
   .replace(/url\(#(noi-(?:skin2|skin|ear|iris|hat|shirt|shorts|pack|pkm))\)/g, `url(#$1-${uid})`);
 ---
-<span class:list={['noi', { 'noi-still': still }, cls]} style={`--noi-size:${size}px`} set:html={svg} />
+<span class:list={['noi', { 'noi-still': still }, cls]} aria-hidden={title ? undefined : 'true'} style={`--noi-size:${size}px`} set:html={svg} />
 
 <style is:global>
   .noi { display: inline-block; line-height: 0; width: var(--noi-size); max-width: 100%; }

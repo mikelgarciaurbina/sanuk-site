@@ -7,17 +7,16 @@ import { storeUrls } from '../data/content';
     <div>
       <p class="ft-brand"><span class="th" lang="th">สนุก</span> Sanuk</p>
       <p class="ft-tag">Thai, curva a curva.</p>
-      <p class="ft-small">Descarga Sanuk en <a href={storeUrls.googlePlay}>Google Play</a> o en la <a href={storeUrls.appStore}>App Store</a>.</p>
+      <p class="ft-small">Descarga Sanuk en <a href={storeUrls.googlePlay}>Google Play</a> o en <a href={storeUrls.appStore}>App Store</a>.</p>
     </div>
-    <ul>
+    <nav aria-label="Pie de página"><ul>
       <li><a href="/#historia">El viaje</a></li>
       <li><a href="/#como-funciona">Cómo funciona</a></li>
-      <li><a href="/juegos">Los 20 juegos</a></li>
-      <li><a href="/design-system">Sistema de diseño</a></li>
-      <li><a href="/soporte">Soporte</a></li>
-      <li><a href="/privacidad">Privacidad</a></li>
-      <li><button type="button" class="motion-toggle" data-motion-toggle aria-pressed="false" hidden>Pausar animaciones</button></li>
-    </ul>
+      <li><a href="/juegos/">Los 20 juegos</a></li>
+      <li><a href="/design-system/">Sistema de diseño</a></li>
+      <li><a href="/soporte/">Soporte</a></li>
+      <li><a href="/privacidad/">Privacidad</a></li>
+    </ul></nav>
     <div class="ft-noi" aria-hidden="true"><Noi pose="duerme" size={96} still /></div>
   </div>
   <p class="wrap ft-end"><span class="th" lang="th">ไม่เป็นไร</span> · Hecho con cariño para quien sueña con Mae Hong Son.</p>
@@ -34,7 +33,6 @@ import { storeUrls } from '../data/content';
   .ft-small { margin: .4em 0 0; color: #c3cde0; }
   ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
   a { color: #fff; font-weight: 800; display: inline-flex; align-items: center; min-height: 44px; padding: 4px 0; }
-  .motion-toggle { color: #fff; font-weight: 800; background: transparent; border: 1px solid #c3cde0; border-radius: 12px; padding: 8px 14px; min-height: 44px; cursor: pointer; margin-top: 8px; }
   a:hover { color: var(--alba); }
   .ft-end { margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--noche-2); font-size: .9rem; color: #c3cde0; }
   .ft-end .th { color: var(--buatong); }

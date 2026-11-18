@@ -1,0 +1,6 @@
+---
+interface Props { text: string }
+const { text } = Astro.props;
+const parts = text.split(/([\u0e01-\u0e5b]+)/u);
+---
+{parts.map((part, i) => i % 2 ? <span lang="th">{part}</span> : part)}

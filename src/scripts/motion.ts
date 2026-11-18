@@ -1,27 +1,27 @@
 // El contenido siempre es visible. Las entradas se animan una sola vez, al llegar a ellas.
 const media = matchMedia('(prefers-reduced-motion: reduce)');
 const root = document.documentElement;
-const button = document.querySelector<HTMLButtonElement>('[data-motion-toggle]');
+const toggle = document.querySelector<HTMLInputElement>('[data-motion-toggle]');
 const animations = new Set<Animation>();
-let paused = media.matches;
-try { paused ||= sessionStorage.getItem('sanuk:motion') === 'paused'; } catch { /* almacenamiento opcional */ }
+let paused = false;
+try { paused = sessionStorage.getItem('sanuk:motion') === 'paused'; } catch { /* almacenamiento opcional */ }
 
 const update = () => {
-  root.dataset.motion = paused ? 'paused' : 'running';
-  if (paused) animations.forEach((animation) => animation.finish());
-  if (button) {
-    button.hidden = false;
-    button.textContent = paused ? 'Activar animaciones' : 'Pausar animaciones';
-    button.setAttribute('aria-pressed', String(paused));
+  const running = !paused && !media.matches;
+  root.dataset.motion = running ? 'running' : 'paused';
+  if (!running) animations.forEach((animation) => animation.finish());
+  if (toggle) {
+    toggle.closest('label')!.hidden = media.matches;
+    toggle.checked = running;
   }
 };
 update();
-button?.addEventListener('click', () => {
-  paused = !paused;
+toggle?.addEventListener('change', () => {
+  paused = !toggle.checked;
   try { sessionStorage.setItem('sanuk:motion', paused ? 'paused' : 'running'); } catch { /* opcional */ }
   update();
 });
-media.addEventListener('change', () => { paused = media.matches; update(); });
+media.addEventListener('change', update);
 
 if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {
@@ -31,7 +31,7 @@ if ('IntersectionObserver' in window) {
       if (paused || media.matches) continue;
       if (entry.target.matches('.rm')) entry.target.setAttribute('data-arrived', '');
       const animation = entry.target.animate(
-        [{ opacity: 0.25, transform: 'translateY(24px)' }, { opacity: 1, transform: 'translateY(0)' }],
+        [{ transform: 'translateY(12px)' }, { transform: 'translateY(0)' }],
         { duration: 650, easing: 'cubic-bezier(.2,.7,.2,1)' },
       );
       animations.add(animation);
