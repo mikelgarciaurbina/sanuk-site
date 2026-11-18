@@ -4,7 +4,7 @@ import Noi from '../components/Noi.astro';
 import Landscape from '../components/Landscape.astro';
 import RoadMap from '../components/RoadMap.astro';
 import LetterDemo from '../components/LetterDemo.astro';
-import { stops, moons, allGames, featuredGames, principles } from '../data/content';
+import { stops, moons, allGames, featuredGames, principles, storeUrls } from '../data/content';
 import { NOI_POSES } from '../brand/noi-art';
 
 const featured = featuredGames.map((n) => allGames.find((g) => g.n === n)!);
@@ -40,7 +40,7 @@ const poseTxt: Record<string, string> = { feliz: 'Feliz', hola: 'Saluda', celebr
           <a class="btn" href="#carta">Prueba la carta de Yai</a>
           <a class="btn btn-ghost" href="#historia">Conoce el viaje <span aria-hidden="true">↗</span></a>
         </div>
-        <p class="soon">3–5 minutos por lección · Muy pronto en iOS y Android</p>
+        <p class="download">3–5 minutos por lección · Descarga Sanuk en <a href={storeUrls.googlePlay}>Google Play</a> o en la <a href={storeUrls.appStore}>App Store</a>.</p>
       </div>
       <div class="hero-noi">
         <div class="bubble"><span class="th" lang="th">สวัสดี!</span> <span class="rom">sà-wàt-dii</span> · ¡hola!</div>
@@ -194,8 +194,11 @@ const poseTxt: Record<string, string> = { feliz: 'Feliz', hola: 'Saluda', celebr
       <Noi pose="celebra" size={180} />
       <div>
         <h2>La niebla se despeja curva a curva</h2>
-        <p class="lead">Muy pronto en iOS y Android.</p>
-        <a class="btn" href="#carta">Prueba la carta de Yai</a>
+        <p class="lead">Descarga Sanuk y empieza el viaje con Noi.</p>
+        <div class="cta">
+          <a class="btn" href={storeUrls.googlePlay}>Google Play</a>
+          <a class="btn" href={storeUrls.appStore}>App Store</a>
+        </div>
       </div>
     </div>
   </section>
@@ -211,7 +214,8 @@ const poseTxt: Record<string, string> = { feliz: 'Feliz', hola: 'Saluda', celebr
   .hero-wm { font-family: var(--f-display); }
   .tag { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.5rem, 4.4vw, 2.1rem); margin: 0 0 .6em; }
   .cta { display: flex; flex-wrap: wrap; gap: 14px; margin: 24px 0 18px; }
-  .soon { font-weight: 800; font-size: .85rem; color: var(--tinta-2); margin: 0; }
+  .download { font-weight: 800; font-size: .85rem; color: var(--tinta-2); margin: 0; }
+  .download a { white-space: nowrap; }
   .hero-noi { display: grid; justify-items: center; gap: 4px; position: relative; padding-top: 20px; }
   .hero-orbit { position: absolute; inset: 18% 0 6%; border: 2px dashed #9cbfb3; border-radius: 50%; transform: rotate(-12deg); }
   .hero-orbit span { position: absolute; background: #fffdf7; color: var(--arrozal-hondo); border: 1px solid #9cbfb3; border-radius: 999px; padding: 6px 12px; font-size: .75rem; font-weight: 900; box-shadow: 0 3px 0 var(--niebla-3); }
@@ -269,4 +273,5 @@ const poseTxt: Record<string, string> = { feliz: 'Feliz', hola: 'Saluda', celebr
   .close-in { display: grid; gap: 24px; justify-items: center; text-align: center; }
   @media (min-width: 720px) { .close-in { grid-template-columns: auto 1fr; text-align: left; justify-items: start; } }
   .close .lead { color: var(--alba); }
+  @media (max-width: 719px) { .close .cta { justify-content: center; } }
 </style>

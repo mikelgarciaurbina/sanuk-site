@@ -1,5 +1,10 @@
 import { tones } from '../brand/tokens';
 
+export const storeUrls = {
+  googlePlay: 'https://play.google.com/store/apps/details?id=app.sanuk.thai',
+  appStore: 'https://apps.apple.com/us/app/sanuk/id6834352671',
+};
+
 export type Tok = { t: string; r: string; g: string };
 export type Line = { toks: Tok[]; es?: string };
 const L = (s: string): Tok[] =>

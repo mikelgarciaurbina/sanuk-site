@@ -1,12 +1,13 @@
 ---
 import Noi from './Noi.astro';
+import { storeUrls } from '../data/content';
 ---
 <footer class="ft">
   <div class="wrap ft-in">
     <div>
       <p class="ft-brand"><span class="th" lang="th">สนุก</span> Sanuk</p>
       <p class="ft-tag">Thai, curva a curva.</p>
-      <p class="ft-small">Muy pronto en iOS y Android.</p>
+      <p class="ft-small">Descarga Sanuk en <a href={storeUrls.googlePlay}>Google Play</a> o en la <a href={storeUrls.appStore}>App Store</a>.</p>
     </div>
     <ul>
       <li><a href="/#historia">El viaje</a></li>
