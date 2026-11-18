@@ -21,6 +21,7 @@ import { storeUrls } from '../data/content';
     <div class="ft-noi" aria-hidden="true"><Noi pose="duerme" size={96} still /></div>
   </div>
   <p class="wrap ft-end"><span class="th" lang="th">ไม่เป็นไร</span> · Hecho con cariño para quien sueña con Mae Hong Son.</p>
+  {Astro.url.pathname === '/' && <p class="wrap ft-credits">Apple, el logotipo de Apple y App Store son marcas de Apple Inc. Google Play y el logotipo de Google Play son marcas de Google LLC.</p>}
 </footer>
 
 <style>
@@ -37,4 +38,5 @@ import { storeUrls } from '../data/content';
   a:hover { color: var(--alba); }
   .ft-end { margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--noche-2); font-size: .9rem; color: #c3cde0; }
   .ft-end .th { color: var(--buatong); }
+  .ft-credits { font-size: .8rem; color: #c3cde0; }
 </style>

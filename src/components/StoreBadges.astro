@@ -1,0 +1,17 @@
+---
+import { storeUrls } from '../data/content';
+---
+<div class="store-badges">
+  <a href={storeUrls.appStore}>
+    <img src="/img/app-store-es.svg" width="144" height="48" alt="Descarga Sanuk en el App Store" />
+  </a>
+  <a href={storeUrls.googlePlay}>
+    <img src="/img/google-play-es.svg" width="162" height="48" alt="Descarga Sanuk en Google Play" />
+  </a>
+</div>
+
+<style>
+  .store-badges { display: flex; flex-wrap: wrap; align-items: center; justify-content: var(--badge-align, flex-start); gap: 16px; margin-block: 16px; }
+  a { display: inline-flex; align-items: center; min-height: 44px; }
+  img { display: block; height: clamp(40px, 12vw, 48px); width: auto; }
+</style>
