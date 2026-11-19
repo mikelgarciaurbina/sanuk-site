@@ -9,27 +9,29 @@ const total = letter.reduce((sum, line) => sum + line.toks.length, 0);
     <button type="button" class="btn btn-ghost btn-sm" data-all>Leer la carta completa</button>
     <button type="button" class="btn btn-ghost btn-sm" data-reset>Empezar de nuevo</button>
     <label class="ld-range">
-      <span>Palabras visibles <b data-n>0</b> de {total}</span>
+      <span id="carta-progreso">Palabras visibles <b data-n>0</b> de {total}</span>
       <input type="range" min="0" max={total} value="0" step="1" data-range aria-label="Palabras visibles" />
     </label>
     <p class="ld-pct"><span aria-hidden="true">Carta revelada · <b data-pct>0</b> %</span><span class="sr-only" role="status" aria-atomic="true" data-announcement></span></p>
   </div>
 
   <article class="paper" aria-label="Carta de Yai en tailandés con traducción al español">
-    <p class="paper-head" lang="th">จดหมายจากยาย</p>
+    <p class="paper-head" lang="th-TH">จดหมายจากยาย</p>
     {letter.map((l) => (
-      <p class="line">
-        <span class="toks">
+      <div class="line">
+        <div class="toks">
           {l.toks.map((t) => (
-            <span class="w">
-              <span class="w-th th" lang="th">{t.t}</span>
-              <span class="w-gl"><span class="w-rom" lang="th-Latn">{t.r}</span><span class="w-es" lang="es">{t.g}</span></span>
-            </span>
+            <div class="w">
+              <p class="w-th th" lang="th-TH" tabindex="-1">{t.t}</p>
+              <p class="w-rom" lang="th-Latn">{t.r}</p>
+              <p class="w-es" lang="es-ES">{t.g}</p>
+            </div>
           ))}
-        </span>
-        <span class="es" lang="es">«{l.es}»</span>
-      </p>
+        </div>
+        <p class="es" lang="es-ES">«{l.es}»</p>
+      </div>
     ))}
+    <button type="button" class="btn btn-sm ld-next" data-next aria-describedby="carta-progreso" hidden>Revelar la siguiente palabra</button>
   </article>
   <p class="ld-end">Has llegado. Yai te ata el hilo blanco en la muñeca (<span class="th" lang="th">ผูกข้อมือ</span>) y ya sabes qué contestar.</p>
 </div>
@@ -50,15 +52,17 @@ const total = letter.reduce((sum, line) => sum + line.toks.length, 0);
   .toks { display: flex; flex-wrap: wrap; gap: 4px 12px; }
   .w { position: relative; display: inline-flex; flex-direction: column; align-items: center; padding: 0 2px; border-radius: 8px; }
   .w-th { font-size: clamp(1.35rem, 4.4vw, 1.8rem); line-height: 1.5; font-weight: 500; transition: filter var(--dur-lento) ease-out; }
-  .w-gl { display: flex; flex-direction: column; align-items: center; line-height: 1.2; font-size: .9rem; margin-top: 2px; transition: opacity var(--dur-lento) ease-out; }
-  .w-rom { font-style: italic; color: var(--tinta-2); }
+  .w p { margin: 0; }
+  .w-rom, .w-es { line-height: 1.2; font-size: .9rem; transition: opacity var(--dur-lento) ease-out; }
+  .w .w-rom { margin-top: 2px; font-style: italic; color: var(--tinta-2); }
   .w-es { font-weight: 900; color: var(--arrozal-hondo); }
-  .es { display: block; margin-top: .6em; font-weight: 700; color: var(--tinta-2); }
+  .es { margin: .6em 0 0; font-weight: 700; color: var(--tinta-2); }
 
   /* niebla: solo con JS activo; sin JS todo se lee */
   .ld[data-js] .w::after { content: ''; position: absolute; inset: -2px; border-radius: 8px; background: rgb(255 255 255 / .78); transform-origin: left center; transform: scaleX(1); transition: transform var(--dur-lento) ease-out; pointer-events: none; }
   .ld[data-js] .w:not(.on) .w-th { filter: blur(6px); }
-  .ld[data-js] .w:not(.on) .w-gl { opacity: 0; }
+  .ld[data-js] .w:not(.on) :is(.w-rom, .w-es) { opacity: 0; }
+  .ld-next { margin-bottom: 1.5rem; }
   .ld[data-js] .w.on::after { transform: scaleX(0); transform-origin: right center; }
   .ld[data-js] .line:not(.done) .es { opacity: 0; transition: opacity var(--dur-lento); }
   .ld[data-js] .line.done .es { opacity: 1; }
@@ -78,6 +82,7 @@ const total = letter.reduce((sum, line) => sum + line.toks.length, 0);
     const nEl = root.querySelector<HTMLElement>('[data-n]')!;
     const pctEl = root.querySelector<HTMLElement>('[data-pct]')!;
     const learn = root.querySelector<HTMLButtonElement>('[data-learn]')!;
+    const next = root.querySelector<HTMLButtonElement>('[data-next]')!;
     const reset = root.querySelector<HTMLButtonElement>('[data-reset]')!;
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
     const reduce = () => motion.matches || document.documentElement.dataset.motion === 'paused';
@@ -91,7 +96,7 @@ const total = letter.reduce((sum, line) => sum + line.toks.length, 0);
       words.forEach((word, index) => {
         const visible = index < n;
         word.classList.toggle('on', visible);
-        word.setAttribute('aria-hidden', String(!visible));
+        word.inert = !visible;
         word.classList.toggle('pop', visible && index >= prev && !reduce());
       });
       lines.forEach((line) => {
@@ -105,19 +110,25 @@ const total = letter.reduce((sum, line) => sum + line.toks.length, 0);
       nEl.textContent = String(n);
       pctEl.textContent = String(Math.round((n / total) * 100));
       learn.setAttribute('aria-disabled', String(n === total));
+      next.hidden = n === 0 || n === total;
+      if (!next.hidden) {
+        const line = words[n - 1]!.closest('.line')!;
+        if (line.nextElementSibling !== next) line.after(next);
+      }
       root.classList.toggle('complete', n === total);
     };
 
-    learn.addEventListener('click', () => {
+    const revealWord = () => {
       if (n === total) return;
       const word = words[n]!;
+      announcement.replaceChildren();
       set(n + 1);
-      const thai = word.querySelector('.w-th')!.cloneNode(true);
-      const meaning = word.querySelector('.w-es')!.textContent;
-      const line = word.closest('.line.done')?.querySelector('.es')?.textContent ?? '';
-      const progress = n === total ? 'Carta completa.' : `Palabra ${n} de ${total}.`;
-      announcement.replaceChildren(thai, `, ${meaning}. ${line} ${progress}`);
-    });
+      // Android flattens multilingual live announcements. Let the reader start
+      // at the Thai paragraph and navigate its language-tagged siblings.
+      word.querySelector<HTMLElement>('.w-th')!.focus();
+    };
+    learn.addEventListener('click', revealWord);
+    next.addEventListener('click', revealWord);
     showAll.addEventListener('click', () => {
       set(total);
       announcement.textContent = 'Carta completa. Puedes leer todas las palabras y su traducción.';
